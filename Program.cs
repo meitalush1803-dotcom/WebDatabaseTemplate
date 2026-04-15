@@ -11,6 +11,7 @@ class Program
     int port = 5000;
 
     var server = new Server(port);
+    
     var database = new Database();
 
     Console.WriteLine("The server is running");
