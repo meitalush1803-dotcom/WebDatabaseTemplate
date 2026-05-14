@@ -1,0 +1,156 @@
+body {
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+    height: 100vh;
+
+    background: linear-gradient(135deg, #ffd6e0, #ffeaf0);
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+/* ===== כותרת האתר ===== */
+
+.site-title {
+    position: absolute;
+    top: 5px;
+
+    font-size: 55px;
+    font-weight: 700;
+
+    color: white;
+
+    letter-spacing: 3px;
+
+    text-align: center;
+
+    animation: glow-pulse 1.5s ease-in-out infinite alternate;
+}
+
+/* glow animation */
+@keyframes glow-pulse {
+    from {
+        text-shadow:
+            0 0 5px #fff,
+            0 0 10px #e14277,
+            0 0 15px #e14277;
+    }
+
+    to {
+        text-shadow:
+            0 0 10px #fff,
+            0 0 20px #e14277,
+            0 0 30px #e14277,
+            0 0 40px #e14277;
+    }
+}
+
+/* ===== כרטיס ===== */
+
+.card {
+    background: white;
+
+    padding: 40px;
+
+    border-radius: 20px;
+
+    text-align: center;
+
+    width: 320px;
+
+    box-shadow: 0 10px 30px rgba(255, 105, 135, 0.3);
+
+    animation: fadeIn 1s ease;
+
+    margin-top: 90px;
+}
+
+/* כותרת */
+.card h1 {
+    margin-bottom: 10px;
+    color: #ff4f87;
+}
+
+/* טקסט */
+.card p {
+    color: #888;
+    margin-bottom: 20px;
+}
+
+/* ===== שדות ===== */
+
+input {
+    width: 90%;
+
+    padding: 12px;
+
+    margin-bottom: 15px;
+
+    border-radius: 12px;
+
+    border: 2px solid #ffd1dc;
+
+    font-size: 15px;
+
+    outline: none;
+
+    transition: 0.3s;
+}
+
+/* focus */
+input:focus {
+    border-color: #ff6f9f;
+
+    box-shadow: 0 0 10px rgba(255, 105, 135, 0.3);
+}
+
+/* ===== כפתור ===== */
+
+button {
+    width: 100%;
+
+    padding: 12px;
+
+    border: none;
+
+    border-radius: 12px;
+
+    font-size: 16px;
+
+    cursor: pointer;
+
+    transition: 0.3s;
+
+    background-color: #ff6f9f;
+
+    color: white;
+}
+
+/* hover */
+button:hover {
+    transform: scale(1.07);
+
+    box-shadow: 0 5px 15px rgba(255, 105, 135, 0.4);
+}
+
+/* הודעות */
+#message {
+    margin-top: 15px;
+
+    color: #ff4f87;
+}
+
+/* אנימציית כניסה */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(40px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

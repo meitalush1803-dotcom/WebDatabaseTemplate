@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+
+    <!-- פונט -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+
+    <!-- קישור ל-CSS -->
+    <link rel="stylesheet" href="login.css">
+</head>
+<body>
+
+    <!-- כותרת האתר -->
+    <h1 class="site-title">Movie Rating 🎬</h1>
+
+    <!-- כרטיס התחברות -->
+    <div class="card">
+
+        <h1>Login</h1>
+
+        <p>Welcome back!</p>
+
+        <!-- שם משתמש -->
+        <input 
+            type="text" 
+            id="username" 
+            placeholder="Enter username"
+        >
+
+        <!-- סיסמה -->
+        <input 
+            type="password" 
+            id="password" 
+            placeholder="Enter password"
+        >
+
+        <!-- כפתור -->
+        <button id="loginBtn">
+            Log In
+        </button>
+
+        <!-- הודעות -->
+        <p id="message"></p>
+
+        <p class ="switch">
+            No account?
+            <a href="signup.html">Sign up</a>
+        </p>
+
+    </div>
+
+    <!-- קישור ל-TS/JS -->
+    <script src="login.js"></script>
+
+</body>
+</html>

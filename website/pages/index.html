@@ -1,15 +1,21 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <link rel="stylesheet" href="index.css" />
-    <title>Index Page</title>
-  </head>
+<html lang="he">
+<head>
+    <meta charset="UTF-8">
+    <title>Movie Rating</title>
+    <link rel="stylesheet" href="index.css">
+    <link rel="icon" type="image/x-icon" href="website/favicon.ico">
+</head>
+<header>
+    <div id="movierating">Movies Rating🎥🍿</div>
+</header>
+<body>
+ <button onclick="goToAddMovie()" id="addmoviebutton"> Add Movie</button>
 
-  <body>
-    <input id="itemInput" placeholder="Item">
-    <input id="amountInput" placeholder="Amount">
-    <button id="addButton">Add</button>
-    <ul id="itemsUl"></ul>
-    <script type="module" src="index.js"></script>
-  </body>
+<main id="moviesContainer">
+    <!-- סרטים יוצגו כאן -->
+</main>
+
+<script src="index.js"></script>
+</body>
 </html>

@@ -1,3 +1,9 @@
+body{
+  background-repeat:no-repeat;
+  background-size: cover;
+  background-image: url(https://i.pinimg.com/webp/736x/fb/c7/8d/fbc78d7f985faa362f1bca67dd6f5186.webp)
+}
+
 #containerDiv {
   display: flex;
   flex-direction: row;
@@ -13,4 +19,19 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+}
+
+#movierating{
+  color:black;
+  font-size: 64px;
+  font-weight: 600;
+  font-family:Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+  display:flex;
+  justify-content: center;
+}
+
+#addmoviebutton{
+  font-size: 48px;
+  border: #000 solid 1px;
+  border-radius: 16px;
 }

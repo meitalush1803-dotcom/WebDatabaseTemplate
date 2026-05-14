@@ -15,8 +15,8 @@ class Program
     var database = new Database();
 
     Console.WriteLine("The server is running");
-    Console.WriteLine($"Local:   http://localhost:{port}/website/pages/index.html");
-    Console.WriteLine($"Network: http://{Network.GetLocalNetworkIPAddress()}:{port}/website/pages/index.html");
+    Console.WriteLine($"Local:   http://localhost:{port}/website/pages/loginsignup.html");
+    Console.WriteLine($"Network: http://{Network.GetLocalNetworkIPAddress()}:{port}/website/pages/loginsignup.html");
 
     while (true)
     {
