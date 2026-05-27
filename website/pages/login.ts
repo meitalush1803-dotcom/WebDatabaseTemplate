@@ -1,33 +1,40 @@
-// לוקחים את הכפתור
-const loginBtn = document.getElementById("loginBtn") as HTMLButtonElement;
+import { send } from "clientUtilities";
 
-// מאזינים ללחיצה
-loginBtn.addEventListener("click", () => {
+const usernameInput = document.querySelector<HTMLInputElement>("#usernameInput")!;
+const passwordInput = document.querySelector<HTMLInputElement>("#passwordInput")!;
+const submitButton = document.querySelector<HTMLButtonElement>("#submitButton")!;
+const errorDiv = document.querySelector<HTMLDivElement>("#errorDiv")!;
 
-    // לוקחים את מה שהמשתמש כתב
-    const username = (document.getElementById("username") as HTMLInputElement).value;
+submitButton.onclick = async function () {
 
-    const password = (document.getElementById("password") as HTMLInputElement).value;
+  const username = usernameInput.value.trim();
+  const password = passwordInput.value;
 
-    // מביאים את הנתונים מה-LocalStorage
-    const savedUser = localStorage.getItem("user");
+  errorDiv.innerText = "";
 
-    const savedPass = localStorage.getItem("pass");
+  if (!username) {
+    errorDiv.innerText = "Please enter a username.";
+    return;
+  }
 
-    // בודקים אם הנתונים נכונים
-    if (username === savedUser && password === savedPass) {
+  if (!password) {
+    errorDiv.innerText = "Please enter a password.";
+    return;
+  }
 
-        // הודעת הצלחה
-        alert("Login successful 💖");
+  const token = await send<string | null>(
+    "logIn",
+    username,
+    password
+  );
 
-        // מעבר לעמוד הבית
-        window.location.href = "home.html";
+  if (token === null) {
+    errorDiv.innerText = "Wrong username or password.";
+    return;
+  }
 
-    } else {
+  localStorage.setItem("userToken", token);
 
-        // הודעת שגיאה
-        const message = document.getElementById("message") as HTMLParagraphElement;
-
-        message.textContent = "Wrong username or password ❌";
-    }
-});
+  // מעבר ל־index.html אחרי התחברות
+  location.href = "index.html";
+};

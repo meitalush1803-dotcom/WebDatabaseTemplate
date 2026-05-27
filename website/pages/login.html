@@ -5,55 +5,39 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
 
-    <!-- פונט -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
-
-    <!-- קישור ל-CSS -->
     <link rel="stylesheet" href="login.css">
 </head>
+
 <body>
 
-    <!-- כותרת האתר -->
     <h1 class="site-title">Movie Rating 🎬</h1>
 
-    <!-- כרטיס התחברות -->
     <div class="card">
 
         <h1>Login</h1>
-
         <p>Welcome back!</p>
 
-        <!-- שם משתמש -->
-        <input 
-            type="text" 
-            id="username" 
-            placeholder="Enter username"
-        >
+        <!-- MATCH TS -->
 
-        <!-- סיסמה -->
-        <input 
-            type="password" 
-            id="password" 
-            placeholder="Enter password"
-        >
+        <input type="text" id="usernameInput" placeholder="Enter username" />
 
-        <!-- כפתור -->
-        <button id="loginBtn">
-            Log In
-        </button>
+        <input type="password" id="passwordInput" placeholder="Enter password" />
 
-        <!-- הודעות -->
-        <p id="message"></p>
+        <button id="submitButton">Log In</button>
 
-        <p class ="switch">
+        <div id="errorDiv"></div>
+
+        <p class="switch">
             No account?
             <a href="signup.html">Sign up</a>
         </p>
 
     </div>
 
-    <!-- קישור ל-TS/JS -->
-    <script src="login.js"></script>
+    <!-- חשוב סדר -->
+    <script src="clientUtilities.js"></script>
+    <script type="module" src="login.js"></script>
 
 </body>
 </html>

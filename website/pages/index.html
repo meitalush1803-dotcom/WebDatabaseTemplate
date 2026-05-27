@@ -1,21 +1,75 @@
 <!DOCTYPE html>
 <html lang="he">
+
 <head>
+
     <meta charset="UTF-8">
+
     <title>Movie Rating</title>
+
     <link rel="stylesheet" href="index.css">
-    <link rel="icon" type="image/x-icon" href="website/favicon.ico">
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+
 </head>
-<header>
-    <div id="movierating">Movies Rating🎥🍿</div>
-</header>
+
 <body>
- <button onclick="goToAddMovie()" id="addmoviebutton"> Add Movie</button>
 
-<main id="moviesContainer">
-    <!-- סרטים יוצגו כאן -->
-</main>
+    <!-- HEADER -->
+    <header>
 
-<script src="index.js"></script>
+        <h1 id="movierating">
+            Movie Rating 🎬
+        </h1>
+
+        <div id="userSection">
+
+            Welcome,
+            <span id="usernameSpan"></span>
+
+            <button id="logoutButton">
+                Log out
+            </button>
+
+        </div>
+
+    </header>
+
+    <!-- סרטים -->
+    <main id="moviesContainer">
+
+    </main>
+
+    <!-- כפתור פלוס -->
+    <button id="floatingButton">
+        +
+    </button>
+
+    <!-- MODAL -->
+    <div id="modal">
+
+        <div id="modalContent">
+
+            <h2>Add Movie 🎥</h2>
+
+            <input type="text" id="movieTitle" placeholder="Movie title">
+
+            <input type="text" id="movieDirector" placeholder="Director">
+
+            <input type="text" id="movieImage" placeholder="Image URL">
+
+            <textarea id="movieDescription" placeholder="Description"></textarea>
+
+            <button onclick="addMovie()">
+                Add Movie
+            </button>
+
+        </div>
+
+    </div>
+
+    <script type="module" src="index.js"></script>
+
 </body>
+
 </html>
