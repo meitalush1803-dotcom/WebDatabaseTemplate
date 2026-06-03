@@ -159,3 +159,8 @@ button:hover {
 a:hover{
     color:#ff4f87;
 }
+
+#errorDiv {
+    color:#a70f0a;
+    text-shadow: 0 0 10px #c21c17 
+}

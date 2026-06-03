@@ -38,3 +38,4 @@ submitButton.onclick = async function () {
   // מעבר ל־index.html אחרי התחברות
   location.href = "index.html";
 };
+

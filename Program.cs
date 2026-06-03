@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 using System.Text.Json.Serialization;
-using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Project.DatabaseUtilities;
 using Project.LoggingUtilities;
@@ -17,14 +16,14 @@ class Program
         var database = new Database();
 
         Console.WriteLine("The server is running");
-        Console.WriteLine($"Local:    http://localhost:{port}/website/pages/login.html");
-        Console.WriteLine($"Network: http://{Network.GetLocalNetworkIPAddress()}:{port}/website/pages/login.html");
+        Console.WriteLine($"Local:    http://localhost:{port}/website/pages/loginsignup.html");
+        Console.WriteLine($"Network: http://{Network.GetLocalNetworkIPAddress()}:{port}/website/pages/loginsignup.html");
 
         while (true)
         {
             var request = server.WaitForRequest();
 
-            Console.WriteLine($"Recieved a request: {request.Name}");
+            Console.WriteLine($"Received a request: {request.Name}");
 
             try
             {
@@ -40,9 +39,21 @@ class Program
                 {
                     GetUser(request, database);
                 }
+                else if (request.Name == "addMovie")
+                {
+                    AddMovie(request, database);
+                }
+                else if (request.Name == "getMovies")
+                {
+                    GetMovies(request, database);
+                }
+                else if (request.Name == "deleteMovie")
+                {
+                    DeleteMovie(request, database);
+                }
                 else
                 {
-                    request.SetStatusCode(400); // בקשה לא מוכרת
+                    request.SetStatusCode(400);
                 }
             }
             catch (Exception exception)
@@ -53,13 +64,12 @@ class Program
         }
     }
 
-    // --- פונקציות הטיפול בבקשות ---
-
     static void SignUp(Request request, Database database)
     {
         var (username, password) = request.GetParams<(string, string)>();
 
-        bool usernameAlreadyExists = database.Users.Any(user => user.Name == username);
+        bool usernameAlreadyExists =
+            database.Users.Any(user => user.Name == username);
 
         if (usernameAlreadyExists)
         {
@@ -68,10 +78,11 @@ class Program
         }
 
         string token = Guid.NewGuid().ToString();
+
         var newUser = new User(token, username, password);
 
         database.Users.Add(newUser);
-        database.SaveChanges(); // שמירה פיזית במסד הנתונים
+        database.SaveChanges();
 
         request.Respond(token);
     }
@@ -104,19 +115,57 @@ class Program
             return;
         }
 
-        var user = database.Users.FirstOrDefault(user => user.Token == token);
+        var user =
+            database.Users.FirstOrDefault(user => user.Token == token);
 
         request.Respond(user);
     }
-} // <--- סגירה תקינה של מחלקת Program
 
-// ==========================================
-//          הגדרות ה-Database והמודלים
-// ==========================================
+    static void AddMovie(Request request, Database database)
+    {
+        var (title, director, image, description) =
+            request.GetParams<(string, string, string, string)>();
+
+        var movie = new Movie(title, director, image, description);
+
+        database.Movies.Add(movie);
+        database.SaveChanges();
+
+        request.Respond(true);
+    }
+
+    static void GetMovies(Request request, Database database)
+    {
+        var movies = database.Movies.ToList();
+
+        request.Respond(movies);
+    }
+
+    static void DeleteMovie(Request request, Database database)
+    {
+        int movieId = request.GetParams<int>();
+
+        var movie =
+            database.Movies.FirstOrDefault(movie => movie.Id == movieId);
+
+        if (movie == null)
+        {
+            request.Respond(false);
+            return;
+        }
+
+        database.Movies.Remove(movie);
+        database.SaveChanges();
+
+        request.Respond(true);
+    }
+}
 
 class Database() : DatabaseCore("database")
 {
     public DbSet<User> Users { get; set; } = default!;
+
+    public DbSet<Movie> Movies { get; set; } = default!;
 }
 
 class User(string token, string name, string password)
@@ -130,4 +179,17 @@ class User(string token, string name, string password)
 
     [JsonIgnore]
     public string Password { get; set; } = password;
+}
+
+class Movie(string title, string director, string image, string description)
+{
+    public int Id { get; set; } = default!;
+
+    public string Title { get; set; } = title;
+
+    public string Director { get; set; } = director;
+
+    public string Image { get; set; } = image;
+
+    public string Description { get; set; } = description;
 }
