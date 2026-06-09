@@ -13,7 +13,6 @@
 
 <body>
 
-    <!-- החלק העליון של האתר -->
     <header>
         <h1 id="movierating">
             Movie Rating 🎬
@@ -29,23 +28,33 @@
         </div>
     </header>
 
-    <!-- כאן יוצגו כל הסרטים -->
+    <!-- כפתורים שפותחים חלון של Favorites / Watch Later -->
+    <div id="topButtons">
+        <button id="favoritesButton" class="top-action-button">
+            Favorites
+        </button>
+
+        <button id="watchLaterButton" class="top-action-button">
+            Watch Later
+        </button>
+    </div>
+
     <main id="moviesContainer"></main>
 
-    <!-- כפתור פלוס להוספת סרט חדש -->
     <button id="floatingButton">
         +
     </button>
 
-    <!-- חלון ריק שנפתח כשלוחצים על תמונת הסרט -->
+    <!-- חלון קופץ -->
     <div id="movieModal">
 
         <div id="movieModalContent">
 
-            <!-- כפתור לסגירת החלון -->
             <button id="closeModalButton">
                 ×
             </button>
+
+            <div id="movieModalDetails"></div>
 
         </div>
 
