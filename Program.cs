@@ -204,18 +204,29 @@ class Program
     }
 
     // הוספת סרט חדש למסד הנתונים
-    static void AddMovie(Request request, Database database)
+static void AddMovie(Request request, Database database)
+{
+    var (token, title, director, year, image, description) =
+        request.GetParams<(string, string, string, int, string, string)>();
+
+    var user =
+        database.Users.FirstOrDefault(user => user.Token == token);
+
+    if (user == null)
     {
-        var (title, director, image, description) =
-            request.GetParams<(string, string, string, string)>();
-
-        var movie = new Movie(title, director, image, description);
-
-        database.Movies.Add(movie);
-        database.SaveChanges();
-
-        request.Respond(true);
+        request.Respond(false);
+        return;
     }
+
+    var movie =
+        new Movie(title, director, year, image, description, user.Id);
+
+    database.Movies.Add(movie);
+
+    database.SaveChanges();
+
+    request.Respond(true);
+}
 
     // קבלת כל הסרטים
     static void GetMovies(Request request, Database database)
@@ -225,19 +236,36 @@ class Program
         request.Respond(movies);
     }
 
-    // מחיקת סרט מהמסד
-    static void DeleteMovie(Request request, Database database)
+ // מחיקת סרט מהמסד
+static void DeleteMovie(Request request, Database database)
+{
+    var (token, movieId) =
+        request.GetParams<(string, int)>();
+
+    var user =
+        database.Users.FirstOrDefault(user => user.Token == token);
+
+    if (user == null)
     {
-        int movieId = request.GetParams<int>();
+        request.Respond(false);
+        return;
+    }
 
-        var movie =
-            database.Movies.FirstOrDefault(movie => movie.Id == movieId);
+    var movie =
+        database.Movies.FirstOrDefault(movie => movie.Id == movieId);
 
-        if (movie == null)
-        {
-            request.Respond(false);
-            return;
-        }
+    if (movie == null)
+    {
+        request.Respond(false);
+        return;
+    }
+
+    // רק המשתמש שהוסיף את הסרט יכול למחוק אותו
+    if (movie.UserId != user.Id)
+    {
+        request.Respond(false);
+        return;
+    }
 
         // מחיקת כל המידע שקשור לסרט לפני מחיקת הסרט עצמו
         database.FavoriteMovies.RemoveRange(
@@ -574,13 +602,24 @@ class User(string token, string name, string password)
 }
 
 // מודל של סרט
-class Movie(string title, string director, string image, string description)
-{
+class Movie(string title, string director, int year, string image, string description, int userId)
+{   
     public int Id { get; set; } = default!;
+
     public string Title { get; set; } = title;
+
     public string Director { get; set; } = director;
+
+    public int Year { get; set; } = year;
+
     public string Image { get; set; } = image;
+
     public string Description { get; set; } = description;
+
+    // המשתמש שהוסיף את הסרט
+    public int UserId { get; set; } = userId;
+
+    public User User { get; set; } = default!;
 }
 
 // טבלה שמחברת בין משתמש לבין סרט שהוא סימן כמועדף

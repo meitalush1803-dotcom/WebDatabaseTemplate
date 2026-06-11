@@ -5,6 +5,8 @@ console.log("INDEX UPDATED");
 
 const token = localStorage.getItem("userToken");
 
+let currentUser: any = null;
+
 const logoutButton =
     document.querySelector<HTMLButtonElement>("#logoutButton")!;
 
@@ -34,7 +36,7 @@ floatingButton.onclick = function (): void {
     location.href = "add-movie.html";
 };
 
-// טעינת המשתמש המחובר
+// טעינת המשתמש המחובר ושמירתו במשתנה כדי לדעת מי הוסיף כל סרט
 async function loadUser(): Promise<void> {
 
     const user = await send<any>("getUser", token);
@@ -44,6 +46,8 @@ async function loadUser(): Promise<void> {
         location.href = "loginsignup.html";
         return;
     }
+
+    currentUser = user;
 
     const usernameSpan =
         document.getElementById("usernameSpan") as HTMLSpanElement;
@@ -78,48 +82,17 @@ async function loadMovies(): Promise<void> {
 
         card.className = "movie-card";
 
+        // בעמוד הראשי מציגים רק את תמונת הסרט
         card.innerHTML = `
             <img class="movie-image" src="${movie.image}" alt="${movie.title}">
-
-            <button class="delete-button">
-                Delete Movie
-            </button>
         `;
 
         const movieImage =
             card.querySelector(".movie-image") as HTMLImageElement;
 
+        // לחיצה על הסרט פותחת את החלון הלבן
         movieImage.onclick = function (): void {
             openMovieDetails(movie);
-        };
-
-        const deleteButton =
-            card.querySelector(".delete-button") as HTMLButtonElement;
-
-        deleteButton.onclick = async function (): Promise<void> {
-
-            const confirmed =
-                confirm("Are you sure you want to delete this movie?");
-
-            if (!confirmed) {
-                return;
-            }
-
-            const movieId =
-                getMovieId(movie);
-
-            const success =
-                await send<boolean>(
-                    "deleteMovie",
-                    movieId
-                );
-
-            if (success) {
-                await loadMovies();
-            }
-            else {
-                alert("Movie was not deleted");
-            }
         };
 
         container.appendChild(card);
@@ -129,6 +102,27 @@ async function loadMovies(): Promise<void> {
 // מחזיר id של סרט
 function getMovieId(movie: Movie): number {
     return (movie as any).id ?? (movie as any).Id;
+}
+
+// מחזיר את id של המשתמש שהוסיף את הסרט
+function getMovieOwnerId(movie: Movie): number {
+    return (movie as any).userId ?? (movie as any).UserId;
+}
+
+// בדיקה האם המשתמש המחובר הוא מי שהוסיף את הסרט
+function isMovieOwner(movie: Movie): boolean {
+
+    if (currentUser == null) {
+        return false;
+    }
+
+    const currentUserId =
+        currentUser.id ?? currentUser.Id;
+
+    const movieOwnerId =
+        getMovieOwnerId(movie);
+
+    return currentUserId === movieOwnerId;
 }
 
 // פתיחת חלון עם פרטי סרט
@@ -164,6 +158,16 @@ async function openMovieDetails(movie: Movie): Promise<void> {
             movieId
         );
 
+    // אם המשתמש המחובר הוא מי שהוסיף את הסרט — נוסיף כפתור מחיקה
+    const deleteButtonHtml =
+        isMovieOwner(movie)
+            ? `
+                <button id="deleteMovieButton" class="modal-delete-button">
+                    Delete Movie
+                </button>
+            `
+            : "";
+
     movieModalDetails.innerHTML = `
         <div class="modal-layout">
 
@@ -173,6 +177,10 @@ async function openMovieDetails(movie: Movie): Promise<void> {
 
                 <p class="movie-director">
                     <b>Director:</b> ${movie.director}
+                </p>
+
+                <p class="movie-year">
+                    <b>Year:</b> ${movie.year}
                 </p>
 
                 <p class="movie-description">
@@ -203,6 +211,8 @@ async function openMovieDetails(movie: Movie): Promise<void> {
 
             <div class="modal-image-box">
                 <img class="modal-movie-image" src="${movie.image}" alt="${movie.title}">
+
+                ${deleteButtonHtml}
             </div>
 
         </div>
@@ -252,6 +262,38 @@ async function openMovieDetails(movie: Movie): Promise<void> {
 
         updateWatchLaterButton(watchLaterActionButton, newValue);
     };
+
+    // חיבור כפתור המחיקה רק אם הוא באמת קיים בחלון
+    const deleteMovieButton =
+        document.querySelector<HTMLButtonElement>("#deleteMovieButton");
+
+    if (deleteMovieButton != null) {
+
+        deleteMovieButton.onclick = async function (): Promise<void> {
+
+            const confirmed =
+                confirm("Are you sure you want to delete this movie?");
+
+            if (!confirmed) {
+                return;
+            }
+
+            const success =
+                await send<boolean>(
+                    "deleteMovie",
+                    token,
+                    movieId
+                );
+
+            if (success) {
+                closeMovieModal();
+                await loadMovies();
+            }
+            else {
+                alert("Movie was not deleted");
+            }
+        };
+    }
 
     createPersonalStars(movieId, personalScore);
     createGlobalStars(globalScore);
@@ -419,6 +461,23 @@ function createGlobalStars(globalScore: number | null): void {
 
     globalRatingDiv.innerHTML = "";
 
+    if (globalScore == null) {
+
+        const noRatingText =
+            document.createElement("span");
+
+        noRatingText.className = "rating-number";
+
+        noRatingText.innerText = "No ratings yet";
+
+        globalRatingDiv.appendChild(noRatingText);
+
+        return;
+    }
+
+    const roundedScore =
+        Math.round(globalScore * 2) / 2;
+
     for (let i = 1; i <= 5; i++) {
 
         const star =
@@ -426,8 +485,11 @@ function createGlobalStars(globalScore: number | null): void {
 
         star.className = "global-star";
 
-        if (globalScore != null && globalScore >= i) {
+        if (roundedScore >= i) {
             star.innerText = "★";
+        }
+        else if (roundedScore >= i - 0.5) {
+            star.innerText = "⯨";
         }
         else {
             star.innerText = "☆";
@@ -435,6 +497,15 @@ function createGlobalStars(globalScore: number | null): void {
 
         globalRatingDiv.appendChild(star);
     }
+
+    const ratingNumber =
+        document.createElement("span");
+
+    ratingNumber.className = "rating-number";
+
+    ratingNumber.innerText = `${globalScore.toFixed(1)}/5`;
+
+    globalRatingDiv.appendChild(ratingNumber);
 }
 
 // פתיחה מחדש של סרט לפי id אחרי שינוי דירוג

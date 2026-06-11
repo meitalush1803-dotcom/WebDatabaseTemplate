@@ -1,5 +1,4 @@
 body {
-
     margin: 0;
 
     min-height: 100vh;
@@ -19,10 +18,8 @@ body {
         );
 }
 
-/* TITLE */
-
+/* כותרת העמוד */
 .site-title {
-
     color: white;
 
     font-size: 55px;
@@ -36,27 +33,23 @@ body {
     animation: glow 2s infinite alternate;
 }
 
+/* אנימציית זוהר לכותרת */
 @keyframes glow {
-
     from {
-
         text-shadow:
             0 0 10px #ff6f9f,
             0 0 20px white;
     }
 
     to {
-
         text-shadow:
             0 0 20px #ff2e75,
             0 0 35px white;
     }
 }
 
-/* CARD */
-
+/* הכרטיס הלבן שבו נמצא טופס הוספת הסרט */
 .form-container {
-
     width: 400px;
 
     padding: 35px;
@@ -78,11 +71,9 @@ body {
     animation: fadeIn 0.7s ease;
 }
 
-/* INPUTS */
-
+/* עיצוב כל שדות הקלט והטקסט */
 input,
 textarea {
-
     padding: 14px;
 
     border-radius: 14px;
@@ -103,28 +94,24 @@ textarea {
     transition: 0.3s;
 }
 
+/* אפקט כאשר לוחצים על שדה */
 input:focus,
 textarea:focus {
-
     transform: scale(1.02);
 
     box-shadow:
         0 0 15px rgba(255, 105, 135, 0.4);
 }
 
-/* TEXTAREA */
-
+/* שדה תיאור הסרט */
 textarea {
-
     min-height: 120px;
 
     resize: none;
 }
 
-/* IMAGE PREVIEW */
-
+/* תצוגה מקדימה של תמונת הסרט */
 #previewImage {
-
     width: 100%;
 
     height: 220px;
@@ -139,19 +126,15 @@ textarea {
         0 5px 15px rgba(0,0,0,0.15);
 }
 
-/* BUTTONS */
-
+/* אזור כפתורי Save ו-Back */
 .buttons {
-
     display: flex;
 
     gap: 15px;
 }
 
-/* SAVE BUTTON */
-
+/* כפתור שמירת הסרט */
 #saveButton {
-
     flex: 1;
 
     background: #ff6f9f;
@@ -171,18 +154,16 @@ textarea {
     transition: 0.3s;
 }
 
+/* אפקט מעבר עכבר על כפתור השמירה */
 #saveButton:hover {
-
     transform: scale(1.05);
 
     box-shadow:
         0 5px 15px rgba(255, 105, 135, 0.5);
 }
 
-/* BACK BUTTON */
-
+/* כפתור חזרה לעמוד הראשי */
 #backButton {
-
     flex: 1;
 
     background: white;
@@ -202,24 +183,20 @@ textarea {
     transition: 0.3s;
 }
 
+/* אפקט מעבר עכבר על כפתור החזרה */
 #backButton:hover {
-
     transform: scale(1.05);
 }
 
-/* ANIMATION */
-
+/* אנימציה עדינה לכניסת הטופס */
 @keyframes fadeIn {
-
     from {
-
         opacity: 0;
 
         transform: translateY(30px);
     }
 
     to {
-
         opacity: 1;
 
         transform: translateY(0);

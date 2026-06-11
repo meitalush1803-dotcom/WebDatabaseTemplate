@@ -8,6 +8,10 @@ const titleInput =
 const directorInput =
     document.getElementById("director") as HTMLInputElement;
 
+// קבלת שדה שנת יציאת הסרט מה-HTML
+const yearInput =
+    document.getElementById("year") as HTMLInputElement;
+
 // קבלת שדה קישור התמונה מה-HTML
 const imageInput =
     document.getElementById("image") as HTMLInputElement;
@@ -31,26 +35,68 @@ imageInput.addEventListener("input", function (): void {
 // פונקציה ששומרת סרט חדש במסד הנתונים
 async function saveMovie(): Promise<void> {
 
+    // קבלת הטוקן של המשתמש המחובר
+    const token =
+        localStorage.getItem("userToken");
+
+    // אם אין טוקן — המשתמש לא מחובר ולכן אי אפשר להוסיף סרט
+    if (token == null) {
+
+        alert("User is not logged in");
+
+        return;
+    }
+
     // לקיחת הערכים שהמשתמש הקליד בטופס
-    const title = titleInput.value;
-    const director = directorInput.value;
-    const image = imageInput.value;
-    const description = descriptionInput.value;
+    const title =
+        titleInput.value.trim();
+
+    const director =
+        directorInput.value.trim();
+
+    const yearText =
+        yearInput.value.trim();
+
+    const image =
+        imageInput.value.trim();
+
+    const description =
+        descriptionInput.value.trim();
 
     // בדיקה שכל השדות מולאו
-    if (title === "" || director === "" || image === "" || description === "") {
+    if (
+        title === "" ||
+        director === "" ||
+        yearText === "" ||
+        image === "" ||
+        description === ""
+    ) {
 
         alert("Please fill in all fields");
 
         return;
     }
 
+    // המרת השנה מטקסט למספר
+    const year =
+        Number(yearText);
+
+    // בדיקה שהשנה היא באמת מספר
+    if (Number.isNaN(year)) {
+
+        alert("Please enter a valid year");
+
+        return;
+    }
+
     // שליחת פרטי הסרט לשרת
-    // חשוב: שולחים פרמטרים רגילים, לא מערך
+    // הסדר חייב להיות זהה למה שהשרת מצפה לקבל ב-Program.cs
     const success = await send<boolean>(
         "addMovie",
+        token,
         title,
         director,
+        year,
         image,
         description
     );
@@ -68,6 +114,6 @@ function goBack(): void {
     location.href = "index.html";
 }
 
-// מאפשר לכפתורים שנמצאים ב-HTML להשתמש בפונקציות האלה
+// מאפשר לכפתורי ה-HTML להשתמש בפונקציות saveMovie ו-goBack
 (window as any).saveMovie = saveMovie;
 (window as any).goBack = goBack;

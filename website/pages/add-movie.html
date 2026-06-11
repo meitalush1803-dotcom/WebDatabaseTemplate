@@ -19,35 +19,48 @@
 
     <main class="form-container">
 
+        <!-- שדה להזנת שם הסרט -->
         <input
             type="text"
             id="title"
             placeholder="Movie Name"
         >
 
+        <!-- שדה להזנת שם הבמאי -->
         <input
             type="text"
             id="director"
             placeholder="Director"
         >
 
+        <!-- שדה להזנת שנת יציאת הסרט -->
+        <input
+            type="number"
+            id="Year"
+            placeholder="Year"
+        >
+
+        <!-- שדה להזנת קישור לתמונת הסרט -->
         <input
             type="text"
             id="image"
             placeholder="Image URL"
         >
 
+        <!-- שדה להזנת תיאור הסרט -->
         <textarea
             id="description"
             placeholder="Movie Description"
         ></textarea>
 
+        <!-- תצוגה מקדימה של תמונת הסרט -->
         <img
             id="previewImage"
             src=""
             alt=""
         >
 
+        <!-- כפתורי שמירה וחזרה -->
         <div class="buttons">
 
             <button onclick="saveMovie()" id="saveButton">

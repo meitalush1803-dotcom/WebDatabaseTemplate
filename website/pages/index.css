@@ -46,7 +46,7 @@ header {
 #userSection {
     display: flex;
     align-items: center;
-    gap: 15px;
+    gap: 5px;
     font-size: 18px;
 }
 
@@ -174,8 +174,8 @@ header {
 
 /* המלבן הלבן של פרטי הסרט */
 #movieModalContent {
-    width: 780px;
-    min-height: 480px;
+    width: 850px;
+    min-height: 550px;
     max-height: 85vh;
 
     background: white;
@@ -248,16 +248,26 @@ header {
     font-size: 16px;
 }
 
+/* שנת הסרט */
+.movie-year {
+    margin: 0 0 15px 0;
+    color: #444;
+    font-size: 16px;
+}
+
 /* תיאור הסרט */
 .movie-description {
     color: #333;
     font-size: 16px;
     line-height: 1.5;
 
-    margin: 0 0 20px 0;
+    height: 70px; /* גובה קבוע */
 
-    max-height: 130px;
-    overflow-y: auto;
+    overflow-y: auto; /* גלילה אם הטקסט ארוך */
+
+    margin: 0 0 15px 0;
+
+    padding-right: 5px;
 }
 
 /* אזור שמור לדירוג שנוסיף בהמשך */
@@ -273,19 +283,43 @@ header {
     font-size: 18px;
 }
 
-/* כוכבים זמניים */
+/* כוכבים  */
 .stars-placeholder {
     color: #ffb400;
     font-size: 25px;
 }
 
-/* אזור שמור לכפתורי מועדפים וצפייה בהמשך */
+/* כוכבי דירוג */
+.star {
+    font-size: 20px;
+    color: #ffb400;
+    cursor: pointer;
+    margin-right: 2px;
+}
+
+/* דירוג ממוצע */
+.global-star {
+    font-size: 20px;
+    color: #ffb400;
+    margin-right: 2px;
+}
+
+/* X לביטול דירוג */
+.remove-rating {
+    font-size: 22px;
+    color: #ff4f87;
+    cursor: pointer;
+    margin-right: 8px;
+}
+
+/* אזור לכפתורי מועדפים וצפייה בהמשך */
 .future-buttons {
     display: flex;
     gap: 10px;
+    margin-top: 20px;
 }
 
-/* כפתורים זמניים */
+/* כפתורים favorites - watch later */
 .future-button {
     flex: 1;
 
@@ -308,12 +342,14 @@ header {
     background: #ff4f87;
 }
 
-/* צד ימין — אזור התמונה */
+/* כפתור מחיקת סרט + צד ימין, אזור התמונה */
 .modal-image-box {
     width: 230px;
+
     display: flex;
-    justify-content: center;
-    align-items: flex-start;
+    flex-direction: column;
+
+    align-items: center;
 }
 
 /* תמונת הסרט בתוך החלון */
@@ -382,4 +418,29 @@ header {
     font-size: 14px;
     color: #333;
     margin-top: 8px;
+}
+
+/* כפתור מחיקה שמופיע רק בתוך חלון פרטי הסרט */
+.modal-delete-button {
+    width: 120px;
+
+    margin-top: 12px;
+
+    border: none;
+
+    background: #ff4f87;
+    color: white;
+
+    padding: 11px;
+
+    border-radius: 10px;
+
+    font-size: 14px;
+    font-family: 'Poppins', sans-serif;
+
+    cursor: pointer;
+}
+
+.modal-delete-button:hover {
+    background: #ff0044;
 }
