@@ -21,11 +21,8 @@ body {
 /* כותרת העמוד */
 .site-title {
     color: white;
-
-    font-size: 55px;
-
+    font-size: 50px;
     margin-bottom: 30px;
-
     text-shadow:
         0 0 10px #ff6f9f,
         0 0 20px white;
@@ -105,9 +102,18 @@ textarea:focus {
 
 /* שדה תיאור הסרט */
 textarea {
-    min-height: 120px;
-
+    min-height: 80px;
     resize: none;
+}
+
+/* הודעת שגיאה בטופס */
+#message {
+    min-height: 25px;
+    font-size: 16px;
+    text-align: center;
+    margin: 0;
+    color:#a70f0a;
+    text-shadow: 0 0 10px #c21c17
 }
 
 /* תצוגה מקדימה של תמונת הסרט */

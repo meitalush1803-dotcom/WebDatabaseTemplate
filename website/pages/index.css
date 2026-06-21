@@ -98,7 +98,7 @@ header {
 /* תמונת הסרט בעמוד הראשי */
 .movie-image {
     width: 100%;
-    height: 280px;
+    height: 300px;
     object-fit: cover;
     display: block;
     cursor: pointer;
@@ -107,25 +107,6 @@ header {
 
 .movie-image:hover {
     opacity: 0.9;
-}
-
-/* כפתור מחיקת סרט */
-.delete-button {
-    margin: 15px;
-    width: calc(100% - 30px);
-    border: none;
-    background: #ff4f87;
-    color: white;
-    padding: 12px;
-    border-radius: 12px;
-    cursor: pointer;
-    font-size: 15px;
-    font-family: 'Poppins', sans-serif;
-    transition: 0.3s;
-}
-
-.delete-button:hover {
-    background: #ff2f6d;
 }
 
 /* כפתור פלוס */
@@ -270,47 +251,73 @@ header {
     padding-right: 5px;
 }
 
-/* אזור שמור לדירוג שנוסיף בהמשך */
+/* אזור  לדירוג   */
 .future-section {
     margin-top: 25px;
     margin-bottom: 18px;
 }
 
-/* כותרת הדירוג */
-.future-section h3 {
-    margin: 0 0 8px 0;
-    color: #ff4f87;
-    font-size: 18px;
-}
 
-/* כוכבים  */
+/* כוכבים זמניים (לא בשימוש כרגע) */
 .stars-placeholder {
+
     color: #ffb400;
+
     font-size: 25px;
 }
 
-/* כוכבי דירוג */
+/* כוכבי הדירוג האישי - המשתמש יכול ללחוץ עליהם */
 .star {
+
     font-size: 20px;
+
     color: #ffb400;
+
     cursor: pointer;
+
     margin-right: 2px;
+
+    /* מונע סימון טקסט בלחיצה */
+    user-select: none;
 }
 
-/* דירוג ממוצע */
+/* כוכבי הדירוג הממוצע - לתצוגה בלבד */
 .global-star {
+
     font-size: 20px;
+
     color: #ffb400;
+
     margin-right: 2px;
+
+    /* חץ רגיל במקום יד */
+    cursor: default;
+
+    /* מונע סימון טקסט */
+    user-select: none;
 }
 
-/* X לביטול דירוג */
+/* X למחיקת הדירוג האישי */
 .remove-rating {
+
     font-size: 22px;
+
     color: #ff4f87;
+
     cursor: pointer;
+
     margin-right: 8px;
+
+    /* מונע סימון טקסט */
+    user-select: none;
 }
+
+/* האזור שמכיל את כל הכוכבים  */
+.rating-stars {
+
+    /* מונע סימון טקסט באזור הדירוג */
+    user-select: none;
+} 
 
 /* אזור לכפתורי מועדפים וצפייה בהמשך */
 .future-buttons {

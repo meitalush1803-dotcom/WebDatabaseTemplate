@@ -1,33 +1,73 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
+    <!-- קידוד UTF-8 כדי שהדף יתמוך באנגלית ובעברית -->
     <meta charset="UTF-8">
+
+    <!-- התאמה למסכים שונים כמו מחשב, טאבלט וטלפון -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- הכותרת שמופיעה בלשונית של הדפדפן -->
     <title>Login / Sign Up</title>
 
-    <!-- Google Font -->
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+    <!-- ייבוא הפונט Poppins מ-Google Fonts -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap"
+        rel="stylesheet"
+    >
 
-    <!-- CSS -->
+    <!-- חיבור קובץ העיצוב של הדף -->
     <link rel="stylesheet" href="loginsignup.css">
-    
-    <h1 class="site-title">Movie Rating 🎬</h1>
+
 </head>
+
 <body>
 
-    <div class="container">
-        
-        <div class="card">
-            <h1>Welcome!</h1>
-            <p>Join us or log in to continue</p>
+    <!-- כותרת האתר הראשית -->
+    <h1 class="site-title">
+        Movie Rating 🎬
+    </h1>
 
+    <!-- קונטיינר שממרכז את הכרטיס באמצע העמוד -->
+    <div class="container">
+
+        <!-- הכרטיס הלבן של הכניסה / הרשמה -->
+        <div class="card">
+
+            <!-- כותרת ברוכים הבאים -->
+            <h1>
+                Welcome!
+            </h1>
+
+            <!-- טקסט הסבר קצר -->
+            <p>
+                Join us or log in to continue
+            </p>
+
+            <!-- אזור הכפתורים -->
             <div class="buttons">
-                <button href="login.html" id="loginBtn" >Login</button>
-                <button id="signupBtn">Sign Up</button>
+
+                <!-- כפתור מעבר לעמוד ההתחברות -->
+                <button id="loginBtn">
+                    Login
+                </button>
+
+                <!-- כפתור מעבר לעמוד ההרשמה -->
+                <button id="signupBtn">
+                    Sign Up
+                </button>
+
             </div>
+
         </div>
+
     </div>
 
+    <!-- קובץ JavaScript שמפעיל את הכפתורים -->
     <script src="loginsignup.js"></script>
+
 </body>
+
 </html>

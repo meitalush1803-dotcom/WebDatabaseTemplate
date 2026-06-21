@@ -20,6 +20,10 @@ const imageInput =
 const descriptionInput =
     document.getElementById("description") as HTMLTextAreaElement;
 
+// הערת שגיאה
+const message =
+    document.getElementById("message") as HTMLParagraphElement;
+
 // קבלת אלמנט התצוגה המקדימה של התמונה
 const previewImage =
     document.getElementById("previewImage") as HTMLImageElement;
@@ -35,6 +39,8 @@ imageInput.addEventListener("input", function (): void {
 // פונקציה ששומרת סרט חדש במסד הנתונים
 async function saveMovie(): Promise<void> {
 
+    message.innerText = "";
+    
     // קבלת הטוקן של המשתמש המחובר
     const token =
         localStorage.getItem("userToken");
@@ -42,9 +48,9 @@ async function saveMovie(): Promise<void> {
     // אם אין טוקן — המשתמש לא מחובר ולכן אי אפשר להוסיף סרט
     if (token == null) {
 
-        alert("User is not logged in");
-
-        return;
+    message.innerText =
+    "Please fill in all fields";
+    return;
     }
 
     // לקיחת הערכים שהמשתמש הקליד בטופס
@@ -72,8 +78,8 @@ async function saveMovie(): Promise<void> {
         description === ""
     ) {
 
-        alert("Please fill in all fields");
-
+        message.innerText =
+        "Please fill in all fields";
         return;
     }
 
@@ -84,8 +90,8 @@ async function saveMovie(): Promise<void> {
     // בדיקה שהשנה היא באמת מספר
     if (Number.isNaN(year)) {
 
-        alert("Please enter a valid year");
-
+    message.innerText =
+        "Please enter a valid year";
         return;
     }
 

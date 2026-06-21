@@ -1,16 +1,163 @@
+/* כל עמוד השגיאה */
+body {
+
+    margin: 0;
+
+    min-height: 100vh;
+
+    font-family: 'Poppins', sans-serif;
+
+    /* הרקע הוורוד של האתר */
+    background:
+        linear-gradient(
+            135deg,
+            #ffd6e0,
+            #ffeaf0
+        );
+
+    /* ממרכז את הכרטיס באמצע המסך */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* הכרטיס הלבן שמכיל את כל תוכן השגיאה */
 #containerDiv {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+
+    width: 430px;
+
+    padding: 45px 35px;
+
+    background: rgba(255, 255, 255, 0.85);
+
+    border-radius: 28px;
+
+    text-align: center;
+
+    /* צל עדין מסביב לכרטיס */
+    box-shadow:
+        0 15px 35px rgba(255, 105, 135, 0.35);
+
+    /* אנימציית כניסה */
+    animation: fadeIn 0.8s ease;
 }
 
+/* האימוג'י של הסרט */
+#emojiDiv {
+
+    font-size: 55px;
+
+    margin-bottom: 10px;
+
+    /* אנימציית ריחוף */
+    animation: float 2s ease-in-out infinite;
+}
+
+/* מספר השגיאה 404 */
 h1 {
-  font-size: 100px;
-  margin-bottom: 0px;
+
+    margin: 0;
+
+    font-size: 105px;
+
+    color: white;
+
+    /* אפקט זוהר בדומה לכותרת האתר */
+    text-shadow:
+        0 0 10px #ff6f9f,
+        0 0 25px #ff4f87,
+        0 0 35px white;
+
+    line-height: 1;
 }
 
+/* כותרת השגיאה */
 h2 {
-  font-size: 50px;
-  margin-top: 0px;
+
+    margin: 15px 0 10px 0;
+
+    color: #ff4f87;
+
+    font-size: 28px;
+}
+
+/* הטקסט שמתאר את הבעיה */
+p {
+
+    margin: 0 0 28px 0;
+
+    color: #666;
+
+    font-size: 16px;
+
+    line-height: 1.5;
+}
+
+/* כפתור חזרה לעמוד הראשי */
+a {
+
+    display: inline-block;
+
+    text-decoration: none;
+
+    background: #ff6f9f;
+
+    color: white;
+
+    padding: 13px 28px;
+
+    border-radius: 14px;
+
+    font-size: 16px;
+
+    transition: 0.3s;
+}
+
+/* אפקט כאשר העכבר עובר על הכפתור */
+a:hover {
+
+    background: #ff4f87;
+
+    transform: scale(1.05);
+
+    box-shadow:
+        0 6px 18px rgba(255, 105, 135, 0.45);
+}
+
+/* אנימציית הופעה של הכרטיס */
+@keyframes fadeIn {
+
+    from {
+
+        opacity: 0;
+
+        transform: translateY(35px);
+    }
+
+    to {
+
+        opacity: 1;
+
+        transform: translateY(0);
+    }
+}
+
+/* אנימציה שגורמת לאימוג'י לזוז למעלה ולמטה */
+@keyframes float {
+
+    0% {
+
+        transform: translateY(0);
+    }
+
+    50% {
+
+        transform: translateY(-8px);
+    }
+
+    100% {
+
+        transform: translateY(0);
+    }
 }
 

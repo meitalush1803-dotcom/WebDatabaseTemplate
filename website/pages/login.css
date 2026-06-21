@@ -1,21 +1,24 @@
 body {
     margin: 0;
+
     font-family: 'Poppins', sans-serif;
+
     height: 100vh;
 
-    /* רקע ורוד */
+    /* רקע ורוד של האתר */
     background: linear-gradient(135deg, #ffd6e0, #ffeaf0);
 
+    /* ממרכז את הכרטיס באמצע המסך */
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
 }
 
-/* ===== כותרת האתר ===== */
-
+/* כותרת האתר */
 .site-title {
     position: absolute;
+
     top: 5px;
 
     font-size: 55px;
@@ -30,7 +33,7 @@ body {
     animation: glow-pulse 1.5s ease-in-out infinite alternate;
 }
 
-/* אנימציית glow */
+/* אנימציית זוהר לכותרת */
 @keyframes glow-pulse {
     from {
         text-shadow:
@@ -48,8 +51,7 @@ body {
     }
 }
 
-/* ===== הכרטיס ===== */
-
+/* הכרטיס הלבן של ההתחברות */
 .card {
     background: white;
 
@@ -65,25 +67,26 @@ body {
 
     animation: fadeIn 1s ease;
 
-    margin-top: 90px;
+    margin-top: 110px;
 }
 
-/* כותרת בתוך הכרטיס */
+/* כותרת Login בתוך הכרטיס */
 .card h1 {
     margin-bottom: 10px;
+
     color: #ff4f87;
 }
 
-/* טקסט קטן */
+/* טקסט קטן בתוך הכרטיס */
 .card p {
     color: #888;
+
     margin-bottom: 20px;
 }
 
-/* ===== שדות ===== */
-
+/* עיצוב בסיסי לכל שדות הקלט */
 input {
-    width: 90%;
+    width: 100%;
 
     padding: 12px;
 
@@ -98,17 +101,31 @@ input {
     outline: none;
 
     transition: 0.3s;
+
+    box-sizing: border-box;
 }
 
-/* אפקט לחיצה */
+/* שדה שם המשתמש */
+#usernameInput {
+    width: 100%;
+}
+
+/* אפקט כאשר לוחצים בתוך שדה */
 input:focus {
     border-color: #ff6f9f;
 
     box-shadow: 0 0 10px rgba(255, 105, 135, 0.3);
 }
 
-/* ===== כפתור ===== */
+/* שדה הסיסמה */
+#passwordInput {
+    width: 100%;
 
+    padding-right: 42px;
+}
+
+
+/* כפתור התחברות */
 button {
     width: 100%;
 
@@ -127,9 +144,11 @@ button {
     background-color: #ff6f9f;
 
     color: white;
+
+    font-family: 'Poppins', sans-serif;
 }
 
-/* hover */
+/* אפקט מעבר עכבר על כפתור ההתחברות */
 button:hover {
     transform: scale(1.07);
 
@@ -137,30 +156,34 @@ button:hover {
 }
 
 /* הודעת שגיאה */
-#message {
-    margin-top: 15px;
+#errorDiv {
+    margin-top: 12px;
 
+    color: #a70f0a;
+
+    text-shadow: 0 0 10px #c21c17;
+
+    font-size: 14px;
+
+    min-height: 20px;
+}
+
+/* קישור Sign up */
+a:hover {
     color: #ff4f87;
 }
 
-/* אנימציית כניסה */
+/* אנימציית כניסה של הכרטיס */
 @keyframes fadeIn {
     from {
         opacity: 0;
+
         transform: translateY(40px);
     }
 
     to {
         opacity: 1;
+
         transform: translateY(0);
     }
-}
-
-a:hover{
-    color:#ff4f87;
-}
-
-#errorDiv {
-    color:#a70f0a;
-    text-shadow: 0 0 10px #c21c17 
 }

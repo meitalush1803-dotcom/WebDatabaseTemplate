@@ -11,7 +11,7 @@ body {
     flex-direction: column;
 }
 
-/* ===== כותרת האתר ===== */
+/*  כותרת האתר  */
 
 .site-title {
     position: absolute;
@@ -136,10 +136,9 @@ button:hover {
 }
 
 /* הודעות */
-#message {
-    margin-top: 15px;
-
-    color: #ff4f87;
+#errorDiv {
+    color:#a70f0a;
+    text-shadow: 0 0 10px #c21c17 
 }
 
 /* אנימציית כניסה */

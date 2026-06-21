@@ -203,20 +203,20 @@ class Program
         request.Respond(user);
     }
 
-    // הוספת סרט חדש למסד הנתונים
-static void AddMovie(Request request, Database database)
-{
-    var (token, title, director, year, image, description) =
-        request.GetParams<(string, string, string, int, string, string)>();
-
-    var user =
-        database.Users.FirstOrDefault(user => user.Token == token);
-
-    if (user == null)
+// הוספת סרט חדש למסד הנתונים
+    static void AddMovie(Request request, Database database)
     {
-        request.Respond(false);
-        return;
-    }
+        var (token, title, director, year, image, description) =
+            request.GetParams<(string, string, string, int, string, string)>();
+
+        var user =
+             GetUserByToken(database, token);
+
+        if (user == null)
+        {
+            request.Respond(false);
+            return;
+        }
 
     var movie =
         new Movie(title, director, year, image, description, user.Id);
@@ -243,7 +243,7 @@ static void DeleteMovie(Request request, Database database)
         request.GetParams<(string, int)>();
 
     var user =
-        database.Users.FirstOrDefault(user => user.Token == token);
+         GetUserByToken(database, token);
 
     if (user == null)
     {
@@ -602,7 +602,7 @@ class User(string token, string name, string password)
 }
 
 // מודל של סרט
-class Movie(string title, string director, int year, string image, string description, int userId)
+class Movie(string title, string director,int year, string image, string description, int userId)
 {   
     public int Id { get; set; } = default!;
 
