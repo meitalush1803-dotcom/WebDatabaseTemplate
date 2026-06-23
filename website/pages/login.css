@@ -105,23 +105,12 @@ input {
     box-sizing: border-box;
 }
 
-/* שדה שם המשתמש */
-#usernameInput {
-    width: 100%;
-}
 
 /* אפקט כאשר לוחצים בתוך שדה */
 input:focus {
     border-color: #ff6f9f;
 
     box-shadow: 0 0 10px rgba(255, 105, 135, 0.3);
-}
-
-/* שדה הסיסמה */
-#passwordInput {
-    width: 100%;
-
-    padding-right: 42px;
 }
 
 

@@ -1,43 +1,98 @@
 <!DOCTYPE html>
+<!-- מציין שמדובר במסמך HTML5 -->
+
 <html lang="en">
+<!-- תגית השורש של העמוד
+     lang="en" מציין שהשפה הראשית של העמוד היא אנגלית -->
+
 <head>
+
+    <!-- מאפשר שימוש תקין בעברית, אנגלית וסימנים מיוחדים -->
     <meta charset="UTF-8">
+
+    <!-- גורם לעמוד להיראות תקין גם במסכים קטנים -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- הכותרת שמופיעה בלשונית של הדפדפן -->
     <title>Login</title>
 
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+    <!-- טעינת הפונט Poppins מאתר Google Fonts -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap"
+        rel="stylesheet"
+    >
+
+    <!-- חיבור קובץ העיצוב של עמוד ההתחברות -->
     <link rel="stylesheet" href="login.css">
+
 </head>
 
 <body>
 
-    <h1 class="site-title">Movie Rating 🎬</h1>
+    <!-- כותרת האתר -->
+    <h1 class="site-title">
+        Movie Rating 🎬
+    </h1>
 
+    <!-- הכרטיס שמכיל את טופס ההתחברות -->
     <div class="card">
 
-        <h1>Login</h1>
-        <p>Welcome back!</p>
+        <!-- כותרת הטופס -->
+        <h1>
+            Login
+        </h1>
 
+        <!-- טקסט קצר למשתמש -->
+        <p>
+            Welcome back!
+        </p>
 
+        <!-- שדה להזנת שם משתמש -->
+        <input
+            type="text"
+            id="usernameInput"
+            placeholder="Enter username"
+        />
 
-        <input type="text" id="usernameInput" placeholder="Enter username" />
+        <!-- שדה להזנת סיסמה
+             type="password" מסתיר את התווים -->
+        <input
+            type="password"
+            id="passwordInput"
+            placeholder="Enter password"
+        />
 
-        <input type="password" id="passwordInput" placeholder="Enter password" />
+        <!-- כפתור התחברות -->
+        <button id="submitButton">
+            Log In
+        </button>
 
-        <button id="submitButton">Log In</button>
-
+        <!-- אזור להצגת הודעות שגיאה -->
         <div id="errorDiv"></div>
 
+        <!-- קישור לעמוד הרשמה -->
         <p class="switch">
+
             No account?
-            <a href="signup.html">Sign up</a>
+
+            <a href="signup.html">
+                Sign up
+            </a>
+
         </p>
 
     </div>
 
-    <!-- חשוב סדר -->
+    <!-- טעינת קובץ clientUtilities
+         מכיל פונקציות עזר לתקשורת עם השרת -->
     <script src="clientUtilities.js"></script>
-    <script type="module" src="login.js"></script>
+
+    <!-- טעינת קובץ הלוגיקה של ההתחברות -->
+    <script
+        type="module"
+        src="login.js"
+    ></script>
 
 </body>
+
 </html>

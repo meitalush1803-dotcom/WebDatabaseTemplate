@@ -1,46 +1,110 @@
+// ייבוא פונקציית send שאחראית על שליחת בקשות לשרת
 import { send } from "clientUtilities";
 
 
-// 1. מציאת כל האלמנטים מה-HTML לפי ה-IDs המדויקים שלך
-const usernameInput = document.querySelector<HTMLInputElement>("#usernameInput")!;
-const passwordInput = document.querySelector<HTMLInputElement>("#passwordInput")!;
-const confirmInput = document.querySelector<HTMLInputElement>("#confirmInput")!;
-const submitButton = document.querySelector<HTMLButtonElement>("#submitButton")!;
-const errorDiv = document.querySelector<HTMLDivElement>("#errorDiv")!;
+// קבלת אלמנטים מה-HTML
 
-// 2. האזנה ללחיצה על כפתור Create Account
-submitButton.onclick = async function() {
-    // איפוס הודעת השגיאה הקודמת
+// שדה שם המשתמש
+const usernameInput =
+    document.querySelector<HTMLInputElement>("#usernameInput")!;
+
+// שדה הסיסמה
+const passwordInput =
+    document.querySelector<HTMLInputElement>("#passwordInput")!;
+
+// שדה אימות סיסמה
+const confirmInput =
+    document.querySelector<HTMLInputElement>("#confirmInput")!;
+
+// כפתור יצירת החשבון
+const submitButton =
+    document.querySelector<HTMLButtonElement>("#submitButton")!;
+
+// אזור להצגת הודעות שגיאה למשתמש
+const errorDiv =
+    document.querySelector<HTMLDivElement>("#errorDiv")!;
+
+
+// לחיצה על Create Account
+
+// כאשר המשתמש לוחץ על כפתור ההרשמה
+submitButton.onclick = async function (): Promise<void> {
+
+    // ניקוי הודעת שגיאה קודמת
     errorDiv.innerText = "";
 
-    const username = usernameInput.value.trim();
-    const password = passwordInput.value;
-    const confirmPassword = confirmInput.value;
+    // קבלת שם המשתמש מהשדה
+    // trim מסיר רווחים מיותרים בתחילת ובסוף הטקסט
+    const username =
+        usernameInput.value.trim();
 
-    // א. בדיקה שכל השדות מלאים
-    if (username == "" || password == "" || confirmPassword == "") {
-        errorDiv.innerText = "Please fill in all fields.";
+    // קבלת הסיסמה
+    const password =
+        passwordInput.value;
+
+    // קבלת הסיסמה החוזרת
+    const confirmPassword =
+        confirmInput.value;
+
+    // בדיקות תקינות
+
+    // בדיקה שכל השדות מולאו
+    if (
+        username == "" ||
+        password == "" ||
+        confirmPassword == ""
+    ) {
+
+        // הצגת הודעת שגיאה
+        errorDiv.innerText =
+            "Please fill in all fields.";
+
         return;
     }
 
-    // ב. בדיקת התאמה בין הסיסמאות
+    // בדיקה שהסיסמה והאימות זהים
     if (password != confirmPassword) {
-        errorDiv.innerText = "Passwords do not match!";
+
+        // הצגת הודעת שגיאה
+        errorDiv.innerText =
+            "Passwords do not match!";
+
         return;
     }
 
-      const token = await send<string | null>("signUp", username, password);
+    // שליחת בקשת הרשמה לשרת
 
-        // ד. בדיקת התשובה מה-Database
-        if (token == null) {
-            // השרת החזיר null כי השם כבר תפוס ב-Database
-            errorDiv.innerText = "Username is already taken!";
-            return;
-        } else {
-            // שמירת הטוקן בזיכרון של הדפדפן
-            localStorage.setItem("userToken", token);
-            
-            // מעבר אוטומטי לעמוד הראשי
-            location.href = "index.html";
-        }
-      }
+    // השרת יוצר משתמש חדש ומחזיר token
+    // אם השם כבר תפוס השרת יחזיר null
+    const token =
+        await send<string | null>(
+            "signUp",
+            username,
+            password
+        );
+
+    // בדיקת תשובת השרת
+
+    // אם התקבל null
+    if (token == null) {
+
+        // שם המשתמש כבר קיים במערכת
+        errorDiv.innerText =
+            "Username is already taken!";
+
+        return;
+    }
+
+    // התחברות אוטומטית
+    
+    // שמירת ה-token בדפדפן
+    // כך המשתמש נשאר מחובר גם אחרי רענון הדף
+    localStorage.setItem(
+        "userToken",
+        token
+    );
+
+    // מעבר אוטומטי לעמוד הראשי
+    location.href =
+        "index.html";
+};

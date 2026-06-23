@@ -1,36 +1,57 @@
+/* ביטול רווחים ברירת מחדל של הדפדפן */
 body {
     margin: 0;
+
+    /* הפונט הראשי של האתר */
     font-family: 'Poppins', sans-serif;
+
+    /* גובה מלא של המסך */
     height: 100vh;
 
+    /* רקע גרדיאנט ורוד */
     background: linear-gradient(135deg, #ffd6e0, #ffeaf0);
 
+    /* ממרכז את התוכן באמצע העמוד */
     display: flex;
     justify-content: center;
     align-items: center;
+
+    /* מסדר את האלמנטים אחד מתחת לשני */
     flex-direction: column;
 }
 
-/*  כותרת האתר  */
-
+/* כותרת האתר */
 .site-title {
+
+    /* מיקום חופשי ביחס למסך */
     position: absolute;
 
-    top:0px;
+    /* מרחק מהחלק העליון */
+    top: 0px;
+
+    /* גודל הטקסט */
     font-size: 55px;
+
+    /* עובי הכתב */
     font-weight: 700;
 
+    /* צבע הטקסט */
     color: white;
 
+    /* רווח בין האותיות */
     letter-spacing: 3px;
 
+    /* יישור למרכז */
     text-align: center;
 
+    /* הפעלת אנימציית הזוהר */
     animation: glow-pulse 1.5s ease-in-out infinite alternate;
 }
 
-/* glow animation */
+/* אנימציית זוהר לכותרת */
 @keyframes glow-pulse {
+
+    /* מצב התחלה */
     from {
         text-shadow:
             0 0 5px #fff,
@@ -38,6 +59,7 @@ body {
             0 0 15px #e14277;
     }
 
+    /* מצב סיום */
     to {
         text-shadow:
             0 0 10px #fff,
@@ -47,113 +69,166 @@ body {
     }
 }
 
-/* ===== כרטיס ===== */
-
+/* הכרטיס הלבן שמכיל את טופס ההרשמה */
 .card {
+
+    /* צבע רקע */
     background: white;
 
+    /* ריווח פנימי */
     padding: 25px;
 
+    /* עיגול פינות */
     border-radius: 20px;
 
+    /* יישור תוכן למרכז */
     text-align: center;
 
+    /* רוחב הכרטיס */
     width: 320px;
 
+    /* צל */
     box-shadow: 0 10px 30px rgba(255, 105, 135, 0.3);
 
+    /* אנימציית כניסה */
     animation: fadeIn 1s ease;
 
+    /* הורדת הכרטיס מעט למטה */
     margin-top: 120px;
 }
 
-/* כותרת */
+/* כותרת בתוך הכרטיס */
 .card h1 {
+
+    /* רווח מתחת לכותרת */
     margin-bottom: 10px;
+
+    /* צבע הכותרת */
     color: #ff4f87;
 }
 
-/* טקסט */
+/* פסקאות בתוך הכרטיס */
 .card p {
+
+    /* צבע הטקסט */
     color: #888;
+
+    /* רווח מתחת לפסקה */
     margin-bottom: 20px;
 }
 
-/* ===== שדות ===== */
-
+/* כל שדות הקלט */
 input {
+
+    /* רוחב השדה */
     width: 90%;
 
+    /* ריווח פנימי */
     padding: 12px;
 
+    /* רווח מתחת לשדה */
     margin-bottom: 15px;
 
+    /* עיגול פינות */
     border-radius: 12px;
 
+    /* מסגרת ורודה */
     border: 2px solid #ffd1dc;
 
+    /* גודל הטקסט */
     font-size: 15px;
 
+    /* הסרת המסגרת הכחולה של הדפדפן */
     outline: none;
 
+    /* מעבר חלק בין מצבים */
     transition: 0.3s;
 }
 
-/* focus */
+/* כאשר המשתמש לוחץ בתוך שדה */
 input:focus {
+
+    /* צבע מסגרת חזק יותר */
     border-color: #ff6f9f;
 
+    /* זוהר מסביב לשדה */
     box-shadow: 0 0 10px rgba(255, 105, 135, 0.3);
 }
 
-/* ===== כפתור ===== */
-
+/* כל הכפתורים בעמוד */
 button {
+
+    /* רוחב מלא */
     width: 100%;
 
+    /* ריווח פנימי */
     padding: 12px;
 
+    /* הסרת מסגרת */
     border: none;
 
+    /* עיגול פינות */
     border-radius: 12px;
 
+    /* גודל הטקסט */
     font-size: 16px;
 
+    /* שינוי סמן העכבר ליד */
     cursor: pointer;
 
+    /* מעבר חלק */
     transition: 0.3s;
 
+    /* צבע רקע */
     background-color: #ff6f9f;
 
+    /* צבע טקסט */
     color: white;
 }
 
-/* hover */
+/* אפקט כאשר העכבר מעל הכפתור */
 button:hover {
+
+    /* הגדלה קלה */
     transform: scale(1.07);
 
+    /* הוספת צל */
     box-shadow: 0 5px 15px rgba(255, 105, 135, 0.4);
 }
 
-/* הודעות */
+/* אזור הודעות השגיאה */
 #errorDiv {
-    color:#a70f0a;
-    text-shadow: 0 0 10px #c21c17 
+
+    /* צבע אדום */
+    color: #a70f0a;
+
+    /* זוהר אדום מסביב לטקסט */
+    text-shadow: 0 0 10px #c21c17;
 }
 
-/* אנימציית כניסה */
+/* אנימציית כניסה של הכרטיס */
 @keyframes fadeIn {
+
+    /* מצב התחלה */
     from {
         opacity: 0;
+
+        /* הכרטיס מתחיל מעט נמוך יותר */
         transform: translateY(40px);
     }
 
+    /* מצב סיום */
     to {
         opacity: 1;
+
+        /* הכרטיס חוזר למקומו */
         transform: translateY(0);
     }
 }
 
-a:hover{
-    color:#ff4f87;
+/* כאשר העכבר מעל קישור */
+a:hover {
+
+    /* שינוי צבע הקישור */
+    color: #ff4f87;
 }

@@ -1,22 +1,33 @@
 <!DOCTYPE html>
+<!-- מציין שמדובר במסמך HTML5 -->
+
 <html lang="he">
+<!-- תגית השורש של העמוד, שפת האתר היא עברית -->
 
 <head>
+
+    <!-- מאפשר הצגת עברית ותווים מיוחדים -->
     <meta charset="UTF-8">
 
+    <!-- הכותרת שמופיעה בלשונית הדפדפן -->
     <title>Add Movie</title>
 
+    <!-- חיבור קובץ העיצוב של העמוד -->
     <link rel="stylesheet" href="add-movie.css">
 
+    <!-- טעינת הפונט Poppins מגוגל -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+
 </head>
 
 <body>
 
+    <!-- כותרת העמוד -->
     <h1 class="site-title">
         Add New Movie 🎬
     </h1>
 
+    <!-- הטופס הראשי של הוספת סרט -->
     <main class="form-container">
 
         <!-- שדה להזנת שם הסרט -->
@@ -53,6 +64,7 @@
             placeholder="Movie Description"
         ></textarea>
 
+        <!-- אזור להצגת הודעות שגיאה או מידע -->
         <p id="message"></p>
 
         <!-- תצוגה מקדימה של תמונת הסרט -->
@@ -62,22 +74,34 @@
             alt=""
         >
 
-        <!-- כפתורי שמירה וחזרה -->
+        <!-- אזור הכפתורים -->
         <div class="buttons">
 
-            <button onclick="saveMovie()" id="saveButton">
+            <!-- שמירת הסרט במסד הנתונים -->
+            <button
+                onclick="saveMovie()"
+                id="saveButton"
+            >
                 Save Movie
             </button>
 
-            <button onclick="goBack()" id="backButton">
+            <!-- חזרה לעמוד הראשי ללא שמירה -->
+            <button
+                onclick="goBack()"
+                id="backButton"
+            >
                 Back
             </button>
 
         </div>
 
     </main>
-    
-    <script type="module" src="add-movie.js"></script>
+
+    <!-- טעינת קובץ TypeScript של העמוד -->
+    <script
+        type="module"
+        src="add-movie.js"
+    ></script>
 
 </body>
 

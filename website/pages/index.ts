@@ -1,559 +1,399 @@
-import { send } from "clientUtilities";
-import { Movie } from "types";
+import { send } from "clientUtilities"; // יבוא פונקציית send שמדברת עם השרת
+import { Movie } from "types"; // יבוא הטיפוס Movie מתוך קובץ types
 
-console.log("INDEX UPDATED");
+console.log("INDEX WITHOUT INNERHTML"); // הודעה בקונסול כדי לדעת שהקובץ המעודכן נטען
 
-const token = localStorage.getItem("userToken");
+const token = localStorage.getItem("userToken"); // שליפת הטוקן של המשתמש מהזיכרון המקומי
 
-let currentUser: any = null;
+let currentUser: any = null; // משתנה שישמור את המשתמש המחובר כרגע
 
-const logoutButton =
-    document.querySelector<HTMLButtonElement>("#logoutButton")!;
+const logoutButton = document.querySelector<HTMLButtonElement>("#logoutButton")!; // כפתור התנתקות
+const floatingButton = document.querySelector<HTMLButtonElement>("#floatingButton")!; // כפתור הפלוס
+const moviesContainer = document.querySelector<HTMLElement>("#moviesContainer")!; // אזור הצגת הסרטים
 
-const floatingButton =
-    document.querySelector<HTMLButtonElement>("#floatingButton")!;
+const movieModal = document.querySelector<HTMLDivElement>("#movieModal")!; // הרקע של החלון הקופץ
+const closeModalButton = document.querySelector<HTMLButtonElement>("#closeModalButton")!; // כפתור סגירת החלון
 
-const movieModal =
-    document.querySelector<HTMLDivElement>("#movieModal")!;
+const movieDetailsView = document.querySelector<HTMLDivElement>("#movieDetailsView")!; // אזור פרטי סרט
+const movieListView = document.querySelector<HTMLDivElement>("#movieListView")!; // אזור רשימת Favorites / Watch Later
 
-const closeModalButton =
-    document.querySelector<HTMLButtonElement>("#closeModalButton")!;
+const modalMovieTitle = document.querySelector<HTMLHeadingElement>("#modalMovieTitle")!; // שם הסרט בחלון
+const modalMovieDirector = document.querySelector<HTMLSpanElement>("#modalMovieDirector")!; // שם הבמאי
+const modalMovieYear = document.querySelector<HTMLSpanElement>("#modalMovieYear")!; // שנת הסרט
+const modalMovieDescription = document.querySelector<HTMLParagraphElement>("#modalMovieDescription")!; // תיאור הסרט
+const modalMovieImage = document.querySelector<HTMLImageElement>("#modalMovieImage")!; // תמונת הסרט בחלון
 
-const movieModalDetails =
-    document.querySelector<HTMLDivElement>("#movieModalDetails")!;
+const personalRatingDiv = document.querySelector<HTMLDivElement>("#personalRatingDiv")!; // אזור דירוג אישי
+const globalRatingDiv = document.querySelector<HTMLDivElement>("#globalRatingDiv")!; // אזור דירוג ממוצע
 
-const favoritesButton =
-    document.querySelector<HTMLButtonElement>("#favoritesButton")!;
+const favoriteActionButton = document.querySelector<HTMLButtonElement>("#favoriteActionButton")!; // כפתור Favorites
+const watchLaterActionButton = document.querySelector<HTMLButtonElement>("#watchLaterActionButton")!; // כפתור Watch Later
+const deleteMovieButton = document.querySelector<HTMLButtonElement>("#deleteMovieButton")!; // כפתור מחיקת סרט
 
-const watchLaterButton =
-    document.querySelector<HTMLButtonElement>("#watchLaterButton")!;
+const favoritesButton = document.querySelector<HTMLButtonElement>("#favoritesButton")!; // כפתור Favorites העליון
+const watchLaterButton = document.querySelector<HTMLButtonElement>("#watchLaterButton")!; // כפתור Watch Later העליון
 
-if (token == null) {
-    location.href = "loginsignup.html";
+const modalListTitle = document.querySelector<HTMLHeadingElement>("#modalListTitle")!; // כותרת רשימת הסרטים
+const modalListContainer = document.querySelector<HTMLDivElement>("#modalListContainer")!; // אזור רשימת הסרטים בחלון
+
+if (token == null) { // אם אין טוקן, המשתמש לא מחובר
+    location.href = "loginsignup.html"; // מעבר לעמוד התחברות
 }
 
-floatingButton.onclick = function (): void {
-    location.href = "add-movie.html";
+floatingButton.onclick = function (): void { // כאשר לוחצים על כפתור הפלוס
+    location.href = "add-movie.html"; // מעבר לעמוד הוספת סרט
 };
 
-// טעינת המשתמש המחובר ושמירתו במשתנה כדי לדעת מי הוסיף כל סרט
-async function loadUser(): Promise<void> {
+async function loadUser(): Promise<void> { // פונקציה שטוענת את המשתמש המחובר
 
-    const user = await send<any>("getUser", token);
+    const user = await send<any>("getUser", token); // בקשה לשרת לקבלת פרטי המשתמש
 
-    if (user == null) {
-        localStorage.removeItem("userToken");
-        location.href = "loginsignup.html";
-        return;
+    if (user == null) { // אם לא התקבל משתמש תקין
+        localStorage.removeItem("userToken"); // מוחקים את הטוקן
+        location.href = "loginsignup.html"; // מחזירים לעמוד התחברות
+        return; // עוצרים את המשך הפעולה
     }
 
-    currentUser = user;
+    currentUser = user; // שמירת המשתמש במשתנה גלובלי
 
-    const usernameSpan =
-        document.getElementById("usernameSpan") as HTMLSpanElement;
+    const usernameSpan = document.getElementById("usernameSpan") as HTMLSpanElement; // מציאת המקום של שם המשתמש
 
-    usernameSpan.innerText = user.name;
+    usernameSpan.innerText = user.name; // הצגת שם המשתמש באתר
 }
 
-// טעינת כל הסרטים לעמוד הראשי
-async function loadMovies(): Promise<void> {
+async function loadMovies(): Promise<void> { // פונקציה שטוענת את כל הסרטים לעמוד הראשי
 
-    const container =
-        document.getElementById("moviesContainer") as HTMLElement;
+    const movies: Movie[] = await send<Movie[]>("getMovies", null); // קבלת כל הסרטים מהשרת
 
-    const movies: Movie[] =
-        await send<Movie[]>("getMovies", null);
+    moviesContainer.replaceChildren(); // ניקוי כל התוכן הקודם בלי להשתמש ב-innerHTML
 
-    container.innerHTML = "";
-
-    if (movies.length === 0) {
-        container.innerHTML = `
-            <p class="empty-message">
-                No movies yet. Click + to add your first movie.
-            </p>
-        `;
-        return;
+    if (movies.length === 0) { // אם אין סרטים באתר
+        const message = document.createElement("p"); // יצירת פסקה חדשה
+        message.className = "empty-message"; // הוספת class לעיצוב
+        message.innerText = "No movies yet. Click + to add your first movie."; // הכנסת טקסט
+        moviesContainer.appendChild(message); // הוספת ההודעה לעמוד
+        return; // יציאה מהפונקציה
     }
 
-    movies.forEach((movie: Movie) => {
+    movies.forEach(function (movie: Movie): void { // מעבר על כל הסרטים
 
-        const card =
-            document.createElement("div");
+        const card = document.createElement("div"); // יצירת כרטיס סרט
+        card.className = "movie-card"; // הוספת class לעיצוב הכרטיס
 
-        card.className = "movie-card";
+        const image = document.createElement("img"); // יצירת תמונת סרט
+        image.className = "movie-image"; // הוספת class לעיצוב התמונה
+        image.src = movie.image; // הכנסת כתובת התמונה
+        image.alt = movie.title; // טקסט חלופי לתמונה
 
-        // בעמוד הראשי מציגים רק את תמונת הסרט
-        card.innerHTML = `
-            <img class="movie-image" src="${movie.image}" alt="${movie.title}">
-        `;
-
-        const movieImage =
-            card.querySelector(".movie-image") as HTMLImageElement;
-
-        // לחיצה על הסרט פותחת את החלון הלבן
-        movieImage.onclick = function (): void {
-            openMovieDetails(movie);
+        image.onclick = function (): void { // כאשר לוחצים על התמונה
+            openMovieDetails(movie); // פתיחת חלון פרטי הסרט
         };
 
-        container.appendChild(card);
+        card.appendChild(image); // הכנסת התמונה לתוך הכרטיס
+        moviesContainer.appendChild(card); // הכנסת הכרטיס לעמוד
     });
 }
 
-// מחזיר id של סרט
-function getMovieId(movie: Movie): number {
-    return (movie as any).id ?? (movie as any).Id;
+function getMovieId(movie: Movie): number { // פונקציה שמחזירה id של סרט
+    return (movie as any).id ?? (movie as any).Id; // תמיכה גם ב-id וגם ב-Id
 }
 
-// מחזיר את id של המשתמש שהוסיף את הסרט
-function getMovieOwnerId(movie: Movie): number {
-    return (movie as any).userId ?? (movie as any).UserId;
+function getMovieOwnerId(movie: Movie): number { // פונקציה שמחזירה id של מי שהוסיף את הסרט
+    return (movie as any).userId ?? (movie as any).UserId; // תמיכה גם ב-userId וגם ב-UserId
 }
 
-// בדיקה האם המשתמש המחובר הוא מי שהוסיף את הסרט
-function isMovieOwner(movie: Movie): boolean {
+function isMovieOwner(movie: Movie): boolean { // בדיקה האם המשתמש המחובר הוא בעל הסרט
 
-    if (currentUser == null) {
-        return false;
+    if (currentUser == null) { // אם אין משתמש מחובר
+        return false; // הוא לא יכול להיות הבעלים
     }
 
-    const currentUserId =
-        currentUser.id ?? currentUser.Id;
+    const currentUserId = currentUser.id ?? currentUser.Id; // שליפת id של המשתמש
+    const movieOwnerId = getMovieOwnerId(movie); // שליפת id של בעל הסרט
 
-    const movieOwnerId =
-        getMovieOwnerId(movie);
-
-    return currentUserId === movieOwnerId;
+    return currentUserId === movieOwnerId; // החזרת true אם זה אותו משתמש
 }
 
-// פתיחת חלון עם פרטי סרט
-async function openMovieDetails(movie: Movie): Promise<void> {
+async function openMovieDetails(movie: Movie): Promise<void> { // פתיחת חלון פרטי סרט
 
-    const movieId =
-        getMovieId(movie);
+    const movieId = getMovieId(movie); // שליפת id של הסרט
 
-    const isFavorite =
-        await send<boolean>(
-            "isFavorite",
-            token,
-            movieId
-        );
+    const isFavorite = await send<boolean>("isFavorite", token, movieId); // בדיקה האם הסרט במועדפים
+    const isWatchLater = await send<boolean>("isWatchLater", token, movieId); // בדיקה האם הסרט ברשימת צפייה בהמשך
+    const personalScore = await send<number | null>("getPersonalScore", token, movieId); // קבלת הדירוג האישי
+    const globalScore = await send<number | null>("getGlobalScore", movieId); // קבלת הדירוג הממוצע
 
-    const isWatchLater =
-        await send<boolean>(
-            "isWatchLater",
-            token,
-            movieId
-        );
+    movieListView.style.display = "none"; // הסתרת תצוגת רשימה
+    movieDetailsView.style.display = "flex"; // הצגת תצוגת פרטי סרט
 
-    const personalScore =
-        await send<number | null>(
-            "getPersonalScore",
-            token,
-            movieId
-        );
+    modalMovieTitle.innerText = movie.title; // הכנסת שם הסרט
+    modalMovieDirector.innerText = movie.director; // הכנסת שם הבמאי
+    modalMovieYear.innerText = String(movie.year); // הכנסת השנה
+    modalMovieDescription.innerText = movie.description; // הכנסת התיאור
+    modalMovieImage.src = movie.image; // הכנסת תמונת הסרט
+    modalMovieImage.alt = movie.title; // הכנסת טקסט חלופי לתמונה
 
-    const globalScore =
-        await send<number | null>(
-            "getGlobalScore",
-            movieId
-        );
+    if (isMovieOwner(movie)) { // אם המשתמש הוא מי שהוסיף את הסרט
+        deleteMovieButton.style.display = "block"; // מציגים כפתור מחיקה
+    }
+    else { // אם הסרט לא שייך למשתמש
+        deleteMovieButton.style.display = "none"; // מסתירים כפתור מחיקה
+    }
 
-    // אם המשתמש המחובר הוא מי שהוסיף את הסרט — נוסיף כפתור מחיקה
-    const deleteButtonHtml =
-        isMovieOwner(movie)
-            ? `
-                <button id="deleteMovieButton" class="modal-delete-button">
-                    Delete Movie
-                </button>
-            `
-            : "";
+    updateFavoriteButton(favoriteActionButton, isFavorite); // עדכון טקסט ועיצוב כפתור מועדפים
+    updateWatchLaterButton(watchLaterActionButton, isWatchLater); // עדכון טקסט ועיצוב כפתור צפייה בהמשך
 
-    movieModalDetails.innerHTML = `
-        <div class="modal-layout">
+    favoriteActionButton.onclick = async function (): Promise<void> { // פעולה בלחיצה על Favorites
 
-            <div class="modal-info">
+        const currentlyFavorite = favoriteActionButton.classList.contains("selected-action"); // בדיקה האם כבר מסומן
+        const newValue = !currentlyFavorite; // הפיכת המצב
 
-                <h2>${movie.title}</h2>
+        await send<boolean>("setFavorite", token, movieId, newValue); // שמירת המצב החדש בשרת
 
-                <p class="movie-director">
-                    <b>Director:</b> ${movie.director}
-                </p>
-
-                <p class="movie-year">
-                    <b>Year:</b> ${movie.year}
-                </p>
-
-                <p class="movie-description">
-                    ${movie.description}
-                </p>
-
-                <div class="rating-section">
-                    <h3>Your Rating</h3>
-                    <div id="personalRatingDiv" class="rating-stars"></div>
-                </div>
-
-                <div class="rating-section">
-                    <h3>Average Rating</h3>
-                    <div id="globalRatingDiv" class="rating-stars"></div>
-                </div>
-
-                <div class="future-buttons">
-
-                    <button id="favoriteActionButton" class="future-button">
-                    </button>
-
-                    <button id="watchLaterActionButton" class="future-button">
-                    </button>
-
-                </div>
-
-            </div>
-
-            <div class="modal-image-box">
-                <img class="modal-movie-image" src="${movie.image}" alt="${movie.title}">
-
-                ${deleteButtonHtml}
-            </div>
-
-        </div>
-    `;
-
-    const favoriteActionButton =
-        document.querySelector<HTMLButtonElement>("#favoriteActionButton")!;
-
-    const watchLaterActionButton =
-        document.querySelector<HTMLButtonElement>("#watchLaterActionButton")!;
-
-    updateFavoriteButton(favoriteActionButton, isFavorite);
-    updateWatchLaterButton(watchLaterActionButton, isWatchLater);
-
-    favoriteActionButton.onclick = async function (): Promise<void> {
-
-        const currentlyFavorite =
-            favoriteActionButton.classList.contains("selected-action");
-
-        const newValue =
-            !currentlyFavorite;
-
-        await send<boolean>(
-            "setFavorite",
-            token,
-            movieId,
-            newValue
-        );
-
-        updateFavoriteButton(favoriteActionButton, newValue);
+        updateFavoriteButton(favoriteActionButton, newValue); // עדכון הכפתור במסך
     };
 
-    watchLaterActionButton.onclick = async function (): Promise<void> {
+    watchLaterActionButton.onclick = async function (): Promise<void> { // פעולה בלחיצה על Watch Later
 
-        const currentlyWatchLater =
-            watchLaterActionButton.classList.contains("selected-action");
+        const currentlyWatchLater = watchLaterActionButton.classList.contains("selected-action"); // בדיקה האם כבר מסומן
+        const newValue = !currentlyWatchLater; // הפיכת המצב
 
-        const newValue =
-            !currentlyWatchLater;
+        await send<boolean>("setWatchLater", token, movieId, newValue); // שמירת המצב החדש בשרת
 
-        await send<boolean>(
-            "setWatchLater",
-            token,
-            movieId,
-            newValue
-        );
-
-        updateWatchLaterButton(watchLaterActionButton, newValue);
+        updateWatchLaterButton(watchLaterActionButton, newValue); // עדכון הכפתור במסך
     };
 
-    // חיבור כפתור המחיקה רק אם הוא באמת קיים בחלון
-    const deleteMovieButton =
-        document.querySelector<HTMLButtonElement>("#deleteMovieButton");
+    deleteMovieButton.onclick = async function (): Promise<void> { // פעולה בלחיצה על מחיקת סרט
 
-    if (deleteMovieButton != null) {
+        const confirmed = confirm("Are you sure you want to delete this movie?"); // שאלה למשתמש לפני מחיקה
 
-        deleteMovieButton.onclick = async function (): Promise<void> {
+        if (!confirmed) { // אם המשתמש ביטל
+            return; // לא מוחקים
+        }
 
-            const confirmed =
-                confirm("Are you sure you want to delete this movie?");
+        const success = await send<boolean>("deleteMovie", token, movieId); // בקשת מחיקה מהשרת
 
-            if (!confirmed) {
-                return;
-            }
+        if (success) { // אם המחיקה הצליחה
+            closeMovieModal(); // סגירת החלון
+            await loadMovies(); // טעינה מחדש של הסרטים
+        }
+        else { // אם המחיקה נכשלה
+            alert("Movie was not deleted"); // הודעה למשתמש
+        }
+    };
 
-            const success =
-                await send<boolean>(
-                    "deleteMovie",
-                    token,
-                    movieId
-                );
+    createPersonalStars(movieId, personalScore); // יצירת כוכבי הדירוג האישי
+    createGlobalStars(globalScore); // יצירת כוכבי הדירוג הממוצע
 
-            if (success) {
-                closeMovieModal();
-                await loadMovies();
-            }
-            else {
-                alert("Movie was not deleted");
-            }
-        };
+    openMovieModal(); // פתיחת החלון
+}
+
+async function openFavoritesModal(): Promise<void> { // פתיחת חלון מועדפים
+
+    const movies: Movie[] = await send<Movie[]>("getFavoriteMovies", token); // קבלת סרטים מועדפים מהשרת
+
+    openMovieListModal("Favorites", movies); // הצגת הרשימה בחלון
+}
+
+async function openWatchLaterModal(): Promise<void> { // פתיחת חלון צפייה בהמשך
+
+    const movies: Movie[] = await send<Movie[]>("getWatchLaterMovies", token); // קבלת סרטי Watch Later מהשרת
+
+    openMovieListModal("Watch Later", movies); // הצגת הרשימה בחלון
+}
+
+function openMovieListModal(title: string, movies: Movie[]): void { // פתיחת רשימת סרטים בחלון
+
+    movieDetailsView.style.display = "none"; // הסתרת תצוגת פרטי סרט
+    movieListView.style.display = "block"; // הצגת תצוגת רשימה
+
+    modalListTitle.innerText = title; // הכנסת כותרת הרשימה
+
+    modalListContainer.replaceChildren(); // ניקוי הרשימה הקודמת בלי innerHTML
+
+    if (movies.length === 0) { // אם אין סרטים ברשימה
+
+        const message = document.createElement("p"); // יצירת הודעה
+        message.className = "empty-message"; // הוספת class לעיצוב
+        message.innerText = "No movies here yet."; // הכנסת טקסט
+
+        modalListContainer.appendChild(message); // הוספת ההודעה לחלון
     }
+    else { // אם יש סרטים ברשימה
 
-    createPersonalStars(movieId, personalScore);
-    createGlobalStars(globalScore);
+        movies.forEach(function (movie: Movie): void { // מעבר על כל הסרטים
 
-    openMovieModal();
-}
+            const card = document.createElement("div"); // יצירת כרטיס קטן
+            card.className = "modal-list-card"; // הוספת class לעיצוב
 
-// פתיחת חלון Favorites
-async function openFavoritesModal(): Promise<void> {
+            const image = document.createElement("img"); // יצירת תמונה
+            image.className = "modal-list-image"; // הוספת class
+            image.src = movie.image; // הכנסת תמונה
+            image.alt = movie.title; // הכנסת טקסט חלופי
 
-    const movies: Movie[] =
-        await send<Movie[]>(
-            "getFavoriteMovies",
-            token
-        );
+            image.onclick = function (): void { // לחיצה על תמונה ברשימה
+                openMovieDetails(movie); // פתיחת פרטי הסרט
+            };
 
-    openMovieListModal("Favorites", movies);
-}
+            const movieName = document.createElement("p"); // יצירת פסקה לשם הסרט
+            movieName.innerText = movie.title; // הכנסת שם הסרט
 
-// פתיחת חלון Watch Later
-async function openWatchLaterModal(): Promise<void> {
-
-    const movies: Movie[] =
-        await send<Movie[]>(
-            "getWatchLaterMovies",
-            token
-        );
-
-    openMovieListModal("Watch Later", movies);
-}
-
-// פתיחת רשימת סרטים בתוך אותו מלבן לבן
-function openMovieListModal(title: string, movies: Movie[]): void {
-
-    let moviesHtml = "";
-
-    if (movies.length === 0) {
-        moviesHtml = `
-            <p class="empty-message">
-                No movies here yet.
-            </p>
-        `;
-    }
-    else {
-        movies.forEach((movie: Movie) => {
-
-            moviesHtml += `
-                <div class="modal-list-card">
-                    <img class="modal-list-image" src="${movie.image}" alt="${movie.title}">
-                    <p>${movie.title}</p>
-                </div>
-            `;
+            card.appendChild(image); // הוספת התמונה לכרטיס
+            card.appendChild(movieName); // הוספת שם הסרט לכרטיס
+            modalListContainer.appendChild(card); // הוספת הכרטיס לרשימה
         });
     }
 
-    movieModalDetails.innerHTML = `
-        <h2 class="modal-list-title">${title}</h2>
-
-        <div class="modal-list">
-            ${moviesHtml}
-        </div>
-    `;
-
-    const listImages =
-        document.querySelectorAll<HTMLImageElement>(".modal-list-image");
-
-    listImages.forEach((image, index) => {
-
-        image.onclick = function (): void {
-            openMovieDetails(movies[index]);
-        };
-    });
-
-    openMovieModal();
+    openMovieModal(); // פתיחת החלון
 }
 
-// שינוי כפתור Favorites לפי מצב
-function updateFavoriteButton(button: HTMLButtonElement, isFavorite: boolean): void {
+function updateFavoriteButton(button: HTMLButtonElement, isFavorite: boolean): void { // עדכון כפתור Favorites
 
-    if (isFavorite) {
-        button.innerText = "Added to Favorites";
-        button.classList.add("selected-action");
+    if (isFavorite) { // אם הסרט כבר במועדפים
+        button.innerText = "Added to Favorites"; // שינוי הטקסט
+        button.classList.add("selected-action"); // הוספת סימון עיצובי
     }
-    else {
-        button.innerText = "Add to Favorites";
-        button.classList.remove("selected-action");
+    else { // אם הסרט לא במועדפים
+        button.innerText = "Add to Favorites"; // שינוי הטקסט
+        button.classList.remove("selected-action"); // הסרת הסימון העיצובי
     }
 }
 
-// שינוי כפתור Watch Later לפי מצב
-function updateWatchLaterButton(button: HTMLButtonElement, isWatchLater: boolean): void {
+function updateWatchLaterButton(button: HTMLButtonElement, isWatchLater: boolean): void { // עדכון כפתור Watch Later
 
-    if (isWatchLater) {
-        button.innerText = "Added to Watch Later";
-        button.classList.add("selected-action");
+    if (isWatchLater) { // אם הסרט כבר ברשימה
+        button.innerText = "Added to Watch Later"; // שינוי הטקסט
+        button.classList.add("selected-action"); // הוספת סימון עיצובי
     }
-    else {
-        button.innerText = "+ Watch Later";
-        button.classList.remove("selected-action");
+    else { // אם הסרט לא ברשימה
+        button.innerText = "+ Watch Later"; // שינוי הטקסט
+        button.classList.remove("selected-action"); // הסרת הסימון
     }
 }
 
-// יצירת כוכבים לדירוג אישי
-function createPersonalStars(movieId: number, personalScore: number | null): void {
+function createPersonalStars(movieId: number, personalScore: number | null): void { // יצירת כוכבי דירוג אישי
 
-    const personalRatingDiv =
-        document.querySelector<HTMLDivElement>("#personalRatingDiv")!;
+    personalRatingDiv.replaceChildren(); // ניקוי הכוכבים הקודמים
 
-    personalRatingDiv.innerHTML = "";
+    const cancelButton = document.createElement("span"); // יצירת כפתור X למחיקת דירוג
+    cancelButton.className = "remove-rating"; // הוספת class לעיצוב
+    cancelButton.innerText = "×"; // הכנסת הסימן X
 
-    const cancelButton =
-        document.createElement("span");
+    cancelButton.onclick = async function (): Promise<void> { // לחיצה על X
 
-    cancelButton.className = "remove-rating";
-    cancelButton.innerText = "×";
+        await send<boolean>("removeRating", token, movieId); // מחיקת הדירוג בשרת
 
-    cancelButton.onclick = async function (): Promise<void> {
-
-        await send<boolean>(
-            "removeRating",
-            token,
-            movieId
-        );
-
-        await openMovieDetailsById(movieId);
+        await openMovieDetailsById(movieId); // פתיחה מחדש של הסרט עם נתונים מעודכנים
     };
 
-    personalRatingDiv.appendChild(cancelButton);
+    personalRatingDiv.appendChild(cancelButton); // הוספת X לאזור הדירוג
 
-    for (let i = 1; i <= 5; i++) {
+    for (let i = 1; i <= 5; i++) { // יצירת 5 כוכבים
 
-        const star =
-            document.createElement("span");
+        const star = document.createElement("span"); // יצירת כוכב
+        star.className = "star"; // הוספת class לעיצוב
 
-        star.className = "star";
-
-        if (personalScore != null && personalScore >= i) {
-            star.innerText = "★";
+        if (personalScore != null && personalScore >= i) { // אם המשתמש דירג עד הכוכב הזה
+            star.innerText = "★"; // כוכב מלא
         }
-        else {
-            star.innerText = "☆";
+        else { // אם המשתמש לא דירג עד הכוכב הזה
+            star.innerText = "☆"; // כוכב ריק
         }
 
-        star.onclick = async function (): Promise<void> {
+        star.onclick = async function (): Promise<void> { // לחיצה על כוכב
 
-            await send<boolean>(
-                "setRating",
-                token,
-                movieId,
-                i
-            );
+            await send<boolean>("setRating", token, movieId, i); // שמירת הדירוג בשרת
 
-            await openMovieDetailsById(movieId);
+            await openMovieDetailsById(movieId); // פתיחה מחדש עם הדירוג המעודכן
         };
 
-        personalRatingDiv.appendChild(star);
+        personalRatingDiv.appendChild(star); // הוספת הכוכב למסך
     }
 }
 
-// יצירת כוכבים לדירוג ממוצע
-function createGlobalStars(globalScore: number | null): void {
+function createGlobalStars(globalScore: number | null): void { // יצירת כוכבי דירוג ממוצע
 
-    const globalRatingDiv =
-        document.querySelector<HTMLDivElement>("#globalRatingDiv")!;
+    globalRatingDiv.replaceChildren(); // ניקוי הדירוג הקודם
 
-    globalRatingDiv.innerHTML = "";
+    if (globalScore == null) { // אם עדיין אין דירוגים
 
-    if (globalScore == null) {
+        const noRatingText = document.createElement("span"); // יצירת הודעת טקסט
+        noRatingText.className = "rating-number"; // הוספת class
+        noRatingText.innerText = "No ratings yet"; // הכנסת הודעה
 
-        const noRatingText =
-            document.createElement("span");
-
-        noRatingText.className = "rating-number";
-
-        noRatingText.innerText = "No ratings yet";
-
-        globalRatingDiv.appendChild(noRatingText);
-
-        return;
+        globalRatingDiv.appendChild(noRatingText); // הצגת ההודעה
+        return; // יציאה מהפונקציה
     }
 
-    const roundedScore =
-        Math.round(globalScore * 2) / 2;
+    const roundedScore = Math.round(globalScore * 2) / 2; // עיגול הדירוג לחצאי כוכבים
 
-    for (let i = 1; i <= 5; i++) {
+    for (let i = 1; i <= 5; i++) { // יצירת 5 כוכבים
 
-        const star =
-            document.createElement("span");
+        const star = document.createElement("span"); // יצירת כוכב
+        star.className = "global-star"; // הוספת class לעיצוב
 
-        star.className = "global-star";
-
-        if (roundedScore >= i) {
-            star.innerText = "★";
+        if (roundedScore >= i) { // אם הדירוג מספיק לכוכב מלא
+            star.innerText = "★"; // כוכב מלא
         }
-        else if (roundedScore >= i - 0.5) {
-            star.innerText = "⯨";
+        else if (roundedScore >= i - 0.5) { // אם הדירוג מספיק לחצי כוכב
+            star.innerText = "⯨"; // חצי כוכב
         }
-        else {
-            star.innerText = "☆";
+        else { // אם הדירוג לא מספיק
+            star.innerText = "☆"; // כוכב ריק
         }
 
-        globalRatingDiv.appendChild(star);
+        globalRatingDiv.appendChild(star); // הוספת הכוכב למסך
     }
 
-    const ratingNumber =
-        document.createElement("span");
+    const ratingNumber = document.createElement("span"); // יצירת טקסט מספרי של הדירוג
+    ratingNumber.className = "rating-number"; // הוספת class
+    ratingNumber.innerText = `${globalScore.toFixed(1)}/5`; // הצגת הדירוג במספר
 
-    ratingNumber.className = "rating-number";
-
-    ratingNumber.innerText = `${globalScore.toFixed(1)}/5`;
-
-    globalRatingDiv.appendChild(ratingNumber);
+    globalRatingDiv.appendChild(ratingNumber); // הוספת המספר למסך
 }
 
-// פתיחה מחדש של סרט לפי id אחרי שינוי דירוג
-async function openMovieDetailsById(movieId: number): Promise<void> {
+async function openMovieDetailsById(movieId: number): Promise<void> { // פתיחת סרט מחדש לפי id
 
-    const movies =
-        await send<Movie[]>("getMovies", null);
+    const movies = await send<Movie[]>("getMovies", null); // קבלת כל הסרטים
 
-    const movie =
-        movies.find(movie => getMovieId(movie) === movieId);
+    const movie = movies.find(function (movie: Movie): boolean { // חיפוש הסרט המתאים
+        return getMovieId(movie) === movieId; // בדיקה לפי id
+    });
 
-    if (movie != null) {
-        await openMovieDetails(movie);
+    if (movie != null) { // אם הסרט נמצא
+        await openMovieDetails(movie); // פתיחת פרטי הסרט
     }
 }
 
-// פתיחת החלון הקופץ
-function openMovieModal(): void {
-    movieModal.style.display = "flex";
+function openMovieModal(): void { // פתיחת החלון הקופץ
+    movieModal.style.display = "flex"; // הצגת החלון
 }
 
-// סגירת החלון הקופץ
-function closeMovieModal(): void {
-    movieModal.style.display = "none";
-    movieModalDetails.innerHTML = "";
+function closeMovieModal(): void { // סגירת החלון הקופץ
+    movieModal.style.display = "none"; // הסתרת החלון
+    personalRatingDiv.replaceChildren(); // ניקוי דירוג אישי
+    globalRatingDiv.replaceChildren(); // ניקוי דירוג ממוצע
+    modalListContainer.replaceChildren(); // ניקוי רשימות
 }
 
-// התנתקות
-function logout(): void {
-    localStorage.removeItem("userToken");
-    location.href = "loginsignup.html";
+function logout(): void { // התנתקות מהאתר
+    localStorage.removeItem("userToken"); // מחיקת הטוקן
+    location.href = "loginsignup.html"; // מעבר לעמוד התחברות
 }
 
-// טעינת העמוד
-window.onload = async (): Promise<void> => {
-    await loadUser();
-    await loadMovies();
+window.onload = async (): Promise<void> => { // פעולה שמתרחשת כאשר העמוד נטען
+    await loadUser(); // טעינת המשתמש
+    await loadMovies(); // טעינת הסרטים
 };
 
-// חיבור כפתורים
-logoutButton.onclick = logout;
-closeModalButton.onclick = closeMovieModal;
-favoritesButton.onclick = openFavoritesModal;
-watchLaterButton.onclick = openWatchLaterModal;
+logoutButton.onclick = logout; // חיבור כפתור ההתנתקות לפונקציה
+closeModalButton.onclick = closeMovieModal; // חיבור כפתור X לסגירת החלון
+favoritesButton.onclick = openFavoritesModal; // חיבור כפתור Favorites העליון
+watchLaterButton.onclick = openWatchLaterModal; // חיבור כפתור Watch Later העליון
 
-// סגירת חלון בלחיצה על הרקע
-movieModal.onclick = function (event: MouseEvent): void {
-    if (event.target === movieModal) {
-        closeMovieModal();
+movieModal.onclick = function (event: MouseEvent): void { // לחיצה על הרקע של החלון
+
+    if (event.target === movieModal) { // אם הלחיצה הייתה על הרקע ולא על התוכן
+        closeMovieModal(); // סגירת החלון
     }
 };

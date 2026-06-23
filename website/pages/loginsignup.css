@@ -1,138 +1,192 @@
+/* ביטול הרווחים ברירת המחדל של הדפדפן */
 body {
+
     margin: 0;
+
+    /* הפונט הראשי של האתר */
     font-family: 'Poppins', sans-serif;
+
+    /* גובה מלא של המסך */
     height: 100vh;
 
     /* רקע ורוד בהיר */
     background: linear-gradient(135deg, #ffd6e0, #ffeaf0);
 
+    /* ממרכז את התוכן */
     display: flex;
     justify-content: center;
     align-items: center;
 
-    /* כדי שנוכל למקם כותרת למעלה */
+    /* מאפשר למקם את הכותרת למעלה
+       ואת הכרטיס במרכז */
     flex-direction: column;
 }
 
 /* ===== כותרת האתר ===== */
 
 .site-title {
+
+    /* מיקום בחלק העליון של המסך */
     position: absolute;
+
     top: 5px;
 
+    /* גודל ועובי הכותרת */
     font-size: 55px;
     font-weight: 700;
 
+    /* צבע הטקסט */
     color: white;
 
+    /* רווח בין האותיות */
     letter-spacing: 3px;
 
-    text-shadow:
-        0 4px 10px rgba(255, 105, 135, 0.5),
-        0 0 20px rgba(255, 255, 255, 0.8);
+    /* יישור למרכז */
+    text-align: center;
 
-    animation: glow 2s infinite alternate;
+    /* אנימציית זוהר */
+    animation: glow-pulse 1.5s ease-in-out infinite alternate;
 }
 
-.site-title {
-  font-size: 55px;
-  color: #fff;
-  text-align: center;
-  /* Apply the animation: name | duration | timing | repetition | direction */
-  animation: glow-pulse 1.5s ease-in-out infinite alternate;
-}
-
+/* אנימציית זוהר לכותרת */
 @keyframes glow-pulse {
-  from {
-    /* Initial subtle glow */
-    text-shadow: 0 0 5px #fff, 0 0 10px #e14277, 0 0 15px #e14277;
-  }
-  to {
-    /* Intense expanded glow */
-    text-shadow: 0 0 10px #fff, 0 0 20px #e14277, 0 0 30px #e14277, 0 0 40px #e14277;
-  }
 
-
-}
-
-/* אנימציה לכותרת */
-@keyframes glow {
+    /* מצב התחלה */
     from {
+
         text-shadow:
-            0 4px 10px rgba(255, 105, 135, 0.4),
-            0 0 15px rgba(255, 255, 255, 0.6);
+            0 0 5px #fff,
+            0 0 10px #e14277,
+            0 0 15px #e14277;
     }
 
+    /* מצב סיום */
     to {
+
         text-shadow:
-            0 6px 20px rgba(255, 105, 135, 0.7),
-            0 0 30px rgba(255, 255, 255, 1);
+            0 0 10px #fff,
+            0 0 20px #e14277,
+            0 0 30px #e14277,
+            0 0 40px #e14277;
     }
 }
+
+/* ===== הכרטיס הראשי ===== */
 
 .card {
+
+    /* רקע לבן */
     background: white;
+
+    /* ריווח פנימי */
     padding: 40px;
+
+    /* פינות מעוגלות */
     border-radius: 20px;
+
+    /* יישור תוכן למרכז */
     text-align: center;
+
+    /* רוחב קבוע */
     width: 320px;
 
-    box-shadow: 0 10px 30px rgba(255, 105, 135, 0.3);
+    /* צל לכרטיס */
+    box-shadow:
+        0 10px 30px rgba(255, 105, 135, 0.3);
+
+    /* אנימציית כניסה */
     animation: fadeIn 1s ease;
 }
 
+/* כותרת בתוך הכרטיס */
 .card h1 {
+
     margin-bottom: 10px;
+
     color: #ff4f87;
 }
 
+/* טקסט הסבר בתוך הכרטיס */
 .card p {
+
     color: #888;
+
     margin-bottom: 30px;
 }
 
+/* אזור שמכיל את שני הכפתורים */
 .buttons {
+
     display: flex;
+
+    /* אחד מתחת לשני */
     flex-direction: column;
+
+    /* רווח בין הכפתורים */
     gap: 15px;
 }
 
+/* עיצוב בסיסי לכל הכפתורים */
 button {
+
     padding: 12px;
+
     border: none;
+
     border-radius: 12px;
+
     font-size: 16px;
+
     cursor: pointer;
+
     transition: 0.3s;
+
+    font-family: 'Poppins', sans-serif;
 }
 
 /* כפתור Login */
 #loginBtn {
+
     background-color: #ff6f9f;
+
     color: white;
 }
 
 /* כפתור Sign Up */
 #signupBtn {
+
     background-color: white;
+
     border: 2px solid #ff6f9f;
+
     color: #ff6f9f;
 }
 
+/* אפקט כאשר העכבר מעל הכפתור */
 button:hover {
+
     transform: scale(1.07);
-    box-shadow: 0 5px 15px rgba(255, 105, 135, 0.4);
+
+    box-shadow:
+        0 5px 15px rgba(255, 105, 135, 0.4);
 }
 
-/* אנימציה */
+/* אנימציית הופעת הכרטיס */
 @keyframes fadeIn {
+
+    /* מצב התחלה */
     from {
+
         opacity: 0;
+
         transform: translateY(40px);
     }
 
+    /* מצב סיום */
     to {
+
         opacity: 1;
+
         transform: translateY(0);
     }
 }

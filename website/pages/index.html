@@ -1,48 +1,76 @@
 <!DOCTYPE html>
+<!-- מציין שמדובר במסמך HTML5 -->
+
 <html lang="he">
+<!-- תגית השורש של העמוד, שפת האתר היא עברית -->
 
 <head>
+
+    <!-- מאפשר הצגת עברית ותווים מיוחדים -->
     <meta charset="UTF-8">
 
+    <!-- הכותרת שמופיעה בלשונית הדפדפן -->
     <title>Movie Rating</title>
 
+    <!-- חיבור קובץ העיצוב -->
     <link rel="stylesheet" href="index.css">
 
+    <!-- טעינת הפונט Poppins מגוגל -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+
 </head>
 
 <body>
 
+    <!-- החלק העליון של האתר -->
     <header>
+
+        <!-- כותרת האתר -->
         <h1 id="movierating">
             Movie Rating🎬
         </h1>
 
+        <!-- אזור המשתמש המחובר -->
         <div id="userSection">
 
-        <span>
-            Welcome, <span id="usernameSpan"></span>!
-        </span>
+            <span>
+                Welcome,
+                <!-- כאן יוצג שם המשתמש -->
+                <span id="usernameSpan"></span>!
+            </span>
 
-        <button id="logoutButton">
-            Log out
-        </button>
-    </div>
+            <!-- כפתור התנתקות -->
+            <button id="logoutButton">
+                Log out
+            </button>
+
+        </div>
+
     </header>
 
-    <!-- כפתורים שפותחים חלון של Favorites / Watch Later -->
+    <!-- כפתורי Favorites ו-Watch Later -->
     <div id="topButtons">
-        <button id="favoritesButton" class="top-action-button">
+
+        <button
+            id="favoritesButton"
+            class="top-action-button"
+        >
             Favorites
         </button>
 
-        <button id="watchLaterButton" class="top-action-button">
+        <button
+            id="watchLaterButton"
+            class="top-action-button"
+        >
             Watch Later
         </button>
+
     </div>
 
+    <!-- כאן יוצגו כל הסרטים -->
     <main id="moviesContainer"></main>
 
+    <!-- כפתור מעבר לעמוד הוספת סרט -->
     <button id="floatingButton">
         +
     </button>
@@ -50,19 +78,146 @@
     <!-- חלון קופץ -->
     <div id="movieModal">
 
+        <!-- תוכן החלון -->
         <div id="movieModalContent">
 
+            <!-- כפתור סגירת החלון -->
             <button id="closeModalButton">
                 ×
             </button>
 
-            <div id="movieModalDetails"></div>
+            <!-- תצוגת פרטי סרט -->
+            <div
+                id="movieDetailsView"
+                class="modal-layout"
+            >
+
+                <!-- צד שמאל - מידע על הסרט -->
+                <div class="modal-info">
+
+                    <!-- שם הסרט -->
+                    <h2 id="modalMovieTitle"></h2>
+
+                    <!-- שם הבמאי -->
+                    <p class="movie-director">
+
+                        <b>Director:</b>
+
+                        <span id="modalMovieDirector"></span>
+
+                    </p>
+
+                    <!-- שנת הסרט -->
+                    <p class="movie-year">
+
+                        <b>Year:</b>
+
+                        <span id="modalMovieYear"></span>
+
+                    </p>
+
+                    <!-- תיאור הסרט -->
+                    <p
+                        id="modalMovieDescription"
+                        class="movie-description"
+                    ></p>
+
+                    <!-- דירוג אישי -->
+                    <div class="rating-section">
+
+                        <h3>
+                            Your Rating
+                        </h3>
+
+                        <!-- כאן יוצגו הכוכבים של המשתמש -->
+                        <div
+                            id="personalRatingDiv"
+                            class="rating-stars"
+                        ></div>
+
+                    </div>
+
+                    <!-- דירוג ממוצע -->
+                    <div class="rating-section">
+
+                        <h3>
+                            Average Rating
+                        </h3>
+
+                        <!-- כאן יוצגו הכוכבים הממוצעים -->
+                        <div
+                            id="globalRatingDiv"
+                            class="rating-stars"
+                        ></div>
+
+                    </div>
+
+                    <!-- כפתורי מועדפים וצפייה בהמשך -->
+                    <div class="future-buttons">
+
+                        <button
+                            id="favoriteActionButton"
+                            class="future-button"
+                        ></button>
+
+                        <button
+                            id="watchLaterActionButton"
+                            class="future-button"
+                        ></button>
+
+                    </div>
+
+                </div>
+
+                <!-- צד ימין - תמונה וכפתור מחיקה -->
+                <div class="modal-image-box">
+
+                    <!-- תמונת הסרט -->
+                    <img
+                        id="modalMovieImage"
+                        class="modal-movie-image"
+                        src=""
+                        alt=""
+                    >
+
+                    <!-- כפתור מחיקת סרט -->
+                    <button
+                        id="deleteMovieButton"
+                        class="modal-delete-button"
+                    >
+                        Delete Movie
+                    </button>
+
+                </div>
+
+            </div>
+
+            <!-- תצוגת Favorites / Watch Later -->
+            <div id="movieListView">
+
+                <!-- כותרת הרשימה -->
+                <h2
+                    id="modalListTitle"
+                    class="modal-list-title"
+                ></h2>
+
+                <!-- כאן יווצרו הסרטים של הרשימה -->
+                <div
+                    id="modalListContainer"
+                    class="modal-list"
+                ></div>
+
+            </div>
 
         </div>
 
     </div>
 
-    <script type="module" src="index.js"></script>
+    <!-- טעינת קובץ הלוגיקה הראשי -->
+    <script
+        type="module"
+        src="index.js"
+    ></script>
 
 </body>
 

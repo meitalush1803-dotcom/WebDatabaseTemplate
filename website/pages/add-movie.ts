@@ -1,71 +1,85 @@
+// ייבוא פונקציית send שאחראית על שליחת בקשות לשרת
 import { send } from "clientUtilities";
 
-// קבלת שדה שם הסרט מה-HTML
+
+// שדה שם הסרט
 const titleInput =
     document.getElementById("title") as HTMLInputElement;
 
-// קבלת שדה שם הבמאי מה-HTML
+// שדה שם הבמאי
 const directorInput =
     document.getElementById("director") as HTMLInputElement;
 
-// קבלת שדה שנת יציאת הסרט מה-HTML
+// שדה שנת יציאת הסרט
 const yearInput =
     document.getElementById("year") as HTMLInputElement;
 
-// קבלת שדה קישור התמונה מה-HTML
+// שדה קישור לתמונת הסרט
 const imageInput =
     document.getElementById("image") as HTMLInputElement;
 
-// קבלת שדה תיאור הסרט מה-HTML
+// שדה תיאור הסרט
 const descriptionInput =
     document.getElementById("description") as HTMLTextAreaElement;
 
-// הערת שגיאה
+// אזור להצגת הודעות למשתמש
 const message =
     document.getElementById("message") as HTMLParagraphElement;
 
-// קבלת אלמנט התצוגה המקדימה של התמונה
+// תמונת התצוגה המקדימה
 const previewImage =
     document.getElementById("previewImage") as HTMLImageElement;
 
-// בכל פעם שמקלידים קישור לתמונה — מציגים תצוגה מקדימה
+
+// בכל שינוי של קישור התמונה
 imageInput.addEventListener("input", function (): void {
 
-    previewImage.src = imageInput.value;
+    // מעדכן את כתובת התמונה
+    previewImage.src =
+        imageInput.value;
 
-    previewImage.style.display = "block";
+    // מציג את התמונה על המסך
+    previewImage.style.display =
+        "block";
 });
 
-// פונקציה ששומרת סרט חדש במסד הנתונים
+
+// פונקציה לשמירת סרט חדש
 async function saveMovie(): Promise<void> {
 
+    // ניקוי הודעה קודמת
     message.innerText = "";
-    
+
     // קבלת הטוקן של המשתמש המחובר
     const token =
         localStorage.getItem("userToken");
 
-    // אם אין טוקן — המשתמש לא מחובר ולכן אי אפשר להוסיף סרט
+    // אם אין טוקן המשתמש לא מחובר
     if (token == null) {
 
-    message.innerText =
-    "Please fill in all fields";
-    return;
+        message.innerText =
+            "Please fill in all fields";
+
+        return;
     }
 
-    // לקיחת הערכים שהמשתמש הקליד בטופס
+    // קבלת שם הסרט
     const title =
         titleInput.value.trim();
 
+    // קבלת שם הבמאי
     const director =
         directorInput.value.trim();
 
+    // קבלת השנה כטקסט
     const yearText =
         yearInput.value.trim();
 
+    // קבלת קישור התמונה
     const image =
         imageInput.value.trim();
 
+    // קבלת תיאור הסרט
     const description =
         descriptionInput.value.trim();
 
@@ -79,47 +93,59 @@ async function saveMovie(): Promise<void> {
     ) {
 
         message.innerText =
-        "Please fill in all fields";
+            "Please fill in all fields";
+
         return;
     }
 
-    // המרת השנה מטקסט למספר
+    // המרת השנה ממחרוזת למספר
     const year =
         Number(yearText);
 
-    // בדיקה שהשנה היא באמת מספר
+    // בדיקה שהשנה היא מספר תקין
     if (Number.isNaN(year)) {
 
-    message.innerText =
-        "Please enter a valid year";
+        message.innerText =
+            "Please enter a valid year";
+
         return;
     }
 
-    // שליחת פרטי הסרט לשרת
-    // הסדר חייב להיות זהה למה שהשרת מצפה לקבל ב-Program.cs
-    const success = await send<boolean>(
-        "addMovie",
-        token,
-        title,
-        director,
-        year,
-        image,
-        description
-    );
+    // שליחת הסרט החדש לשרת
+    // הסדר חייב להיות זהה לסדר שהשרת מצפה לקבל
+    const success =
+        await send<boolean>(
+            "addMovie",
+            token,
+            title,
+            director,
+            year,
+            image,
+            description
+        );
 
-    // אם הסרט נשמר בהצלחה — חוזרים לעמוד הראשי
+    // אם השמירה הצליחה
     if (success) {
 
-        location.href = "index.html";
+        // מעבר לעמוד הראשי
+        location.href =
+            "index.html";
     }
 }
 
-// פונקציה שחוזרת לעמוד הראשי בלי לשמור סרט
+
+// חזרה לעמוד הראשי ללא שמירת הסרט
 function goBack(): void {
 
-    location.href = "index.html";
+    location.href =
+        "index.html";
 }
 
-// מאפשר לכפתורי ה-HTML להשתמש בפונקציות saveMovie ו-goBack
-(window as any).saveMovie = saveMovie;
-(window as any).goBack = goBack;
+
+// מאפשר ל-HTML להפעיל את saveMovie()
+(window as any).saveMovie =
+    saveMovie;
+
+// מאפשר ל-HTML להפעיל את goBack()
+(window as any).goBack =
+    goBack;

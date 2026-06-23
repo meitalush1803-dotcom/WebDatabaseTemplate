@@ -1,45 +1,115 @@
 <!DOCTYPE html>
+<!-- מציין לדפדפן שמדובר במסמך HTML5 -->
+
 <html lang="en">
+<!-- תגית השורש של העמוד
+     lang="en" מציין שהשפה הראשית של העמוד היא אנגלית -->
 
 <head>
+    <!-- אזור הגדרות העמוד (לא מוצג למשתמש) -->
+
     <meta charset="UTF-8">
+    <!-- מאפשר שימוש תקין בעברית, אנגלית וסימנים מיוחדים -->
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- גורם לעמוד להיראות תקין גם במסכים קטנים כמו טלפונים -->
+
     <title>Sign Up</title>
+    <!-- הטקסט שמופיע בלשונית של הדפדפן -->
 
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+    <!-- טעינת הפונט Poppins מאתר Google Fonts -->
+
     <link rel="stylesheet" href="signup.css">
+    <!-- חיבור קובץ העיצוב של העמוד -->
 </head>
 
 <body>
+    <!-- כל מה שנמצא בתוך body מוצג למשתמש -->
 
-    <h1 class="site-title">Movie Rating 🎬</h1>
+    <h1 class="site-title">
+        Movie Rating 🎬
+    </h1>
+    <!-- כותרת האתר שמופיעה בראש העמוד -->
 
     <div class="card">
+        <!-- כרטיס לבן שמרכז את כל אזור ההרשמה -->
 
-        <h1>Sign Up</h1>
-        <p>Create your account</p>
+        <h1>
+            Sign Up
+        </h1>
+        <!-- כותרת טופס ההרשמה -->
 
-        <!-- MATCH TS IDs -->
+        <p>
+            Create your account
+        </p>
+        <!-- טקסט הסבר קצר למשתמש -->
 
-        <input type="text" id="usernameInput" placeholder="Choose username" />
 
-        <input type="password" id="passwordInput" placeholder="Choose password" />
+        <!-- שדות ההרשמה -->
 
-        <input type="password" id="confirmInput" placeholder="Confirm password" />
+        <input
+            type="text"
+            id="usernameInput"
+            placeholder="Choose username"
+        />
+        <!-- שדה להזנת שם משתמש
+             ה-id משמש את TypeScript למציאת האלמנט -->
 
-        <button id="submitButton">Create Account</button>
+        <input
+            type="password"
+            id="passwordInput"
+            placeholder="Choose password"
+        />
+        <!-- שדה להזנת סיסמה
+             type="password" מסתיר את התווים -->
+
+        <input
+            type="password"
+            id="confirmInput"
+            placeholder="Confirm password"
+        />
+        <!-- שדה לאימות הסיסמה
+             המשתמש נדרש להקליד שוב את אותה הסיסמה -->
+
+        <!-- כפתור יצירת חשבון -->
+
+        <button id="submitButton">
+            Create Account
+        </button>
+        <!-- בלחיצה עליו מופעל קוד ההרשמה ב-signup.ts -->
+
+        <!-- אזור הודעות שגיאה -->
 
         <div id="errorDiv"></div>
+        <!-- כאן יוצגו הודעות כמו:
+             Please fill in all fields
+             Passwords do not match
+             Username is already taken -->
+
+        <!-- קישור לעמוד התחברות -->
 
         <p class="switch">
+
             Have an account?
-            <a href="login.html">Log in</a>
+
+            <a href="login.html">
+                Log in
+            </a>
+
         </p>
+        <!-- אם כבר יש למשתמש חשבון
+             הוא יכול לעבור לעמוד Login -->
 
     </div>
 
-    <!-- חשוב: קודם clientUtilities ואז הקוד שלך -->
+    <!-- טעינת קובץ TypeScript -->
+
     <script type="module" src="signup.js"></script>
+    <!-- טעינת קובץ ה-JavaScript שנוצר מ-signup.ts
+         הקובץ אחראי על כל לוגיקת ההרשמה:
+         בדיקות תקינות, שליחת בקשה לשרת,
+         קבלת token ושמירתו ב-localStorage -->
 
 </body>
 
